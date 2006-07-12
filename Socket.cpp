@@ -24,14 +24,21 @@ Socket::Socket(int fd=-1) {
     error = false;
 }
 /////////////////////////////////////////////////
-Socket::Socket(const Socket *&s) {
-    if (s) {
+Socket::Socket(const Socket & s) {
+    socket_descriptor = s.socket_descriptor;
+    domain = s.domain;
+    type = s.type;
+    protocol = s.protocol;
+    shutdown_method = s.shutdown_method;
+
+// when s was a socket pointer
+/*    if (s) {
         socket_descriptor = s->socket_descriptor;
         error = false;
     }
     else {
         init();
-    }
+    }*/
 }
 /////////////////////////////////////////////////
 void Socket::setDomain(int d) {
@@ -44,6 +51,10 @@ void Socket::setType(int t) {
 /////////////////////////////////////////////////
 void Socket::setProtocol(int p) {
     protocol = p;
+}
+/////////////////////////////////////////////////
+int Socket::getSocketDescriptor() {
+    return socket_descriptor;
 }
 /////////////////////////////////////////////////
 int Socket::getDomain() {
@@ -90,7 +101,15 @@ void Socket::close() {
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {
-    close();
-    printf("[Socket] destruct.\n");
+// 07.12.2006 - berto
+// don't auto-destruct.
+//
+//    close();
+//    printf("[Socket] destruct.\n");
+}
+/////////////////////////////////////////////////
+// friend?
+int socketCleanup(int fd, int how=2) {
+    return shutdown(fd, how);
 }
 /////////////////////////////////////////////////

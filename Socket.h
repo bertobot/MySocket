@@ -27,7 +27,8 @@ public:
     Socket();
     Socket(int);
     Socket(int, int, int, int);
-    Socket(const Socket *&);
+    //Socket(const Socket *&);
+    Socket(const Socket&);
 
     // mutators
     void setDomain(int);
@@ -36,6 +37,8 @@ public:
     void setShutdownMethod(int);
 
     // accessors
+    int getSocketDescriptor();
+
     int getDomain();
     int getType();
     int getProtocol();
@@ -64,5 +67,7 @@ protected:
 
     bool error;
 };
+/////////////////////////////////////////////////
+int socketCleanup(int, int);
 /////////////////////////////////////////////////
 #endif

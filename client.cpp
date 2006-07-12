@@ -12,6 +12,9 @@ int main() {
         printf ("something went wrong...\n");
     }
 
+    // clean up
+    client.close();
+
     return 0;
 }
 /////////////////////////////////////////////////

@@ -19,6 +19,9 @@ int main() {
     else
         printf ("couldn't listen\n");
 
+    // clean up
+    server.close();
+
     return 0;
 }
 /////////////////////////////////////////////////
