@@ -28,19 +28,20 @@ Socket::Socket(int fd=-1) {
 /////////////////////////////////////////////////
 Socket::Socket(const Socket & s) {
     socket_descriptor = s.socket_descriptor;
-//     domain = s.domain;
-//     type = s.type;
-//     protocol = s.protocol;
-//     shutdown_method = s.shutdown_method;
+    init();
+}
+/////////////////////////////////////////////////
+Socket Socket::operator=(const Socket &rhs) {
+    // if same object, return
+    if (this == &rhs)
+        return *this;
 
-// when s was a socket pointer
-/*    if (s) {
-        socket_descriptor = s->socket_descriptor;
-        error = false;
-    }
-    else {
-        init();
-    }*/
+    // clear?  no
+
+    socket_descriptor = rhs.socket_descriptor;
+    init();
+
+    return *this;
 }
 /////////////////////////////////////////////////
 void Socket::setDomain(int d) {
