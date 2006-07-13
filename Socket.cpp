@@ -22,14 +22,16 @@ Socket::Socket(int d, int t, int p, int s) {
 Socket::Socket(int fd=-1) {
     socket_descriptor = fd;
     error = false;
+
+    domain = type = protocol = shutdown_method = 0;
 }
 /////////////////////////////////////////////////
 Socket::Socket(const Socket & s) {
     socket_descriptor = s.socket_descriptor;
-    domain = s.domain;
-    type = s.type;
-    protocol = s.protocol;
-    shutdown_method = s.shutdown_method;
+//     domain = s.domain;
+//     type = s.type;
+//     protocol = s.protocol;
+//     shutdown_method = s.shutdown_method;
 
 // when s was a socket pointer
 /*    if (s) {
