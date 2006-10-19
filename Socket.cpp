@@ -103,6 +103,16 @@ void Socket::close() {
     printf("[Socket: close] shutdown.\n");
 }
 /////////////////////////////////////////////////
+std::string Socket::getIP() {
+    struct sockaddr_in client_sockaddr;
+    int size = sizeof(client_sockaddr);
+
+    int errorcheck = getpeername(socket_descriptor, (struct sockaddr*) &client_sockaddr, (socklen_t *)&size );
+    if (errorcheck == 0)
+        return inet_ntoa (client_sockaddr.sin_addr);
+    return "failed";
+}
+/////////////////////////////////////////////////
 Socket::~Socket() {
 // 07.12.2006 - berto
 // don't auto-destruct.

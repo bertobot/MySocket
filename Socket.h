@@ -50,6 +50,8 @@ public:
 
     virtual bool isValid();
 
+    virtual std::string getIP();
+
     void close();
 
     virtual ~Socket();

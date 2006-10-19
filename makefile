@@ -17,6 +17,10 @@ client: client.o $(OBJ)
 
 lib: $(OBJ)
 	ar rs $(LIBNAME) $(OBJ)
+
+lib_release: lib
+	mkdir MySocketLib
+	cp *.h libSocket.a MySocketLib/
 	
 Socket.o: Socket.cpp
 	$(CC) -c Socket.cpp
