@@ -52,12 +52,13 @@ public:
 
     virtual std::string getIP();
 
-    void close();
+    virtual int close();
 
     virtual ~Socket();
 
 private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
+    void pre_init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
 
 protected:
     int

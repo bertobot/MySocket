@@ -1,14 +1,16 @@
 #include "Socket.h"
 /////////////////////////////////////////////////
-void Socket::init(int d, int t, int p, int s) {
+void Socket::pre_init(int d, int t, int p, int s) {
     domain = d;
     type = t;
     protocol = p;
     shutdown_method = s;
-
-    socket_descriptor = socket(d, t, p);
-
     error = false;
+}
+/////////////////////////////////////////////////
+void Socket::init(int d, int t, int p, int s) {
+    pre_init(d, t, p, s);    
+    socket_descriptor = socket(d, t, p);
 }
 /////////////////////////////////////////////////
 Socket::Socket() {
@@ -21,14 +23,14 @@ Socket::Socket(int d, int t, int p, int s) {
 /////////////////////////////////////////////////
 Socket::Socket(int fd=-1) {
     socket_descriptor = fd;
-    error = false;
-
-    domain = type = protocol = shutdown_method = 0;
+    //error = false;
+    //domain = type = protocol = shutdown_method = 0;
+    pre_init();
 }
 /////////////////////////////////////////////////
 Socket::Socket(const Socket & s) {
     socket_descriptor = s.socket_descriptor;
-    init();
+    pre_init();
 }
 /////////////////////////////////////////////////
 Socket Socket::operator=(const Socket &rhs) {
@@ -98,9 +100,11 @@ bool Socket::isValid() {
     return (socket_descriptor >= 0) && !error;
 }
 /////////////////////////////////////////////////
-void Socket::close() {
-    shutdown(socket_descriptor, 2);
+int Socket::close() {
+    int rc = shutdown(socket_descriptor, 2);
     printf("[Socket: close] shutdown.\n");
+
+    return rc;
 }
 /////////////////////////////////////////////////
 std::string Socket::getIP() {
