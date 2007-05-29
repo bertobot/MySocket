@@ -9,7 +9,7 @@ void Socket::pre_init(int d, int t, int p, int s) {
 }
 /////////////////////////////////////////////////
 void Socket::init(int d, int t, int p, int s) {
-    pre_init(d, t, p, s);    
+    pre_init(d, t, p, s);
     socket_descriptor = socket(d, t, p);
 }
 /////////////////////////////////////////////////
@@ -101,9 +101,11 @@ bool Socket::isValid() {
 }
 /////////////////////////////////////////////////
 int Socket::close() {
-    int rc = shutdown(socket_descriptor, 2);
-    printf("[Socket: close] shutdown.\n");
+    int rc = ::close(socket_descriptor);
+    // it turns out that close frees a socket descriptor,
+    // as to shutdown only disables send or recv.
 
+    printf("[Socket: close]\n");
     return rc;
 }
 /////////////////////////////////////////////////
