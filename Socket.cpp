@@ -106,7 +106,7 @@ int Socket::close() {
     // as to shutdown only disables send or recv.
 
     printf("[Socket: close]\n");
-    socket_descriptor = 0;
+    socket_descriptor = -1;
     return rc;
 }
 /////////////////////////////////////////////////
@@ -131,7 +131,7 @@ Socket::~Socket() {
 // friend?
 int socketCleanup(int fd, int how=2) {
     int rc = close(fd);
-    fd = 0;
+    fd = -1;
     return rc;
 }
 /////////////////////////////////////////////////
