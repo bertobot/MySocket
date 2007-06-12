@@ -121,11 +121,15 @@ std::string Socket::getIP() {
 }
 /////////////////////////////////////////////////
 int Socket::blocking() {
-    return fcntl(socket_descriptor, F_SETFD, O_NONBLOCK);
+    int rc = fcntl(socket_descriptor, F_SETFD, O_SYNC);
+    rc += fcntl(socket_descriptor, F_SETFL, O_SYNC);
+    return rc;
 }
 /////////////////////////////////////////////////
 int Socket::nonBlocking() {
-    return fcntl(socket_descriptor, F_SETFD, O_SYNC);
+    int rc = fcntl(socket_descriptor, F_SETFD, O_NONBLOCK);
+    rc += fcntl(socket_descriptor, F_SETFL, O_NONBLOCK);
+    return rc;
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {
