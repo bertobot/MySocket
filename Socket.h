@@ -19,6 +19,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 #include <string>
 /////////////////////////////////////////////////
@@ -53,6 +54,9 @@ public:
     virtual std::string getIP();
 
     virtual int close();
+
+    int blocking();        // set to block
+    int nonBlocking();     // set to not block
 
     virtual ~Socket();
 

@@ -120,6 +120,14 @@ std::string Socket::getIP() {
     return "failed";
 }
 /////////////////////////////////////////////////
+int Socket::blocking() {
+    return fcntl(socket_descriptor, F_SETFD, O_NONBLOCK);
+}
+/////////////////////////////////////////////////
+int Socket::nonBlocking() {
+    return fcntl(socket_descriptor, F_SETFD, O_SYNC);
+}
+/////////////////////////////////////////////////
 Socket::~Socket() {
 // 07.12.2006 - berto
 // don't auto-destruct.
