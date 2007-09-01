@@ -50,13 +50,9 @@ public:
     int write(const std::string&);
 
     virtual bool isValid();
-
     virtual std::string getIP();
-
     virtual int close();
-
-    int blocking();        // set to block
-    int nonBlocking();     // set to not block
+    virtual int makeNonBlocking();
 
     virtual ~Socket();
 
@@ -74,7 +70,5 @@ protected:
 
     bool error;
 };
-/////////////////////////////////////////////////
-int socketCleanup(int, int);
 /////////////////////////////////////////////////
 #endif

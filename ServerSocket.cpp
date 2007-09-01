@@ -43,6 +43,10 @@ bool ServerSocket::isValid() {
     return (isBound() && Socket::isValid() );
 }
 /////////////////////////////////////////////////
+int ServerSocket::getPort() {
+    return port;
+}
+/////////////////////////////////////////////////
 ServerSocket::~ServerSocket() {
 
 }

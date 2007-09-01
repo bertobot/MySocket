@@ -101,9 +101,8 @@ bool Socket::isValid() {
 }
 /////////////////////////////////////////////////
 int Socket::close() {
-    int rc = ::close(socket_descriptor);
-    // it turns out that close frees a socket descriptor,
-    // as to shutdown only disables send or recv.
+    int rc = ::shutdown(socket_descriptor, 2);
+    rc |= ::close(socket_descriptor);
 
     printf("[Socket: close]\n");
     socket_descriptor = -1;
@@ -120,15 +119,10 @@ std::string Socket::getIP() {
     return "failed";
 }
 /////////////////////////////////////////////////
-int Socket::blocking() {
-    int rc = fcntl(socket_descriptor, F_SETFD, O_SYNC);
-    rc += fcntl(socket_descriptor, F_SETFL, O_SYNC);
-    return rc;
-}
-/////////////////////////////////////////////////
-int Socket::nonBlocking() {
-    int rc = fcntl(socket_descriptor, F_SETFD, O_NONBLOCK);
-    rc += fcntl(socket_descriptor, F_SETFL, O_NONBLOCK);
+int Socket::makeNonBlocking() {
+    long currentFlags = fcntl(socket_descriptor, F_GETFL);
+    currentFlags |= O_NONBLOCK;
+    int rc = fcntl(socket_descriptor, F_SETFL, currentFlags);
     return rc;
 }
 /////////////////////////////////////////////////
@@ -138,12 +132,5 @@ Socket::~Socket() {
 //
 //    close();
 //    printf("[Socket] destruct.\n");
-}
-/////////////////////////////////////////////////
-// friend?
-int socketCleanup(int fd, int how=2) {
-    int rc = close(fd);
-    fd = -1;
-    return rc;
 }
 /////////////////////////////////////////////////

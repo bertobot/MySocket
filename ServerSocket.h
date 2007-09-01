@@ -26,6 +26,8 @@ public:
 
     bool isBound();
 
+    int getPort();
+
     virtual bool isValid();
 
     virtual ~ServerSocket();
