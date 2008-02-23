@@ -49,7 +49,7 @@ public:
     std::string read();
     int write(const std::string&);
 
-    int setOptions(int level, int optname, int boolean);
+    int setOption(int level, int optname, int boolean);
 
     virtual bool isValid();
     virtual std::string getIP();
