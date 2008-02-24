@@ -23,12 +23,8 @@ public:
     // functionality
     bool listen(int);
     Socket accept();
-
     bool isBound();
-
     int getPort();
-
-    virtual bool isValid();
 
     virtual ~ServerSocket();
 
