@@ -1,5 +1,7 @@
 CC=g++ -g3 -Wall
-DIR=`pwd`
+RELEASE_DIR=MySocket_release
+RELEASE_LIB=$(RELEASE_DIR)/lib/MySocket
+RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 
 OBJ=Socket.o \
 ClientSocket.o \
@@ -19,10 +21,10 @@ lib: $(OBJ)
 	ar rs $(LIBNAME) $(OBJ)
 
 lib_release: lib
-	mkdir -p MySocket/include
-	mkdir -p MySocket/lib
-	cp *.h MySocket/include
-	cp libSocket.a MySocket/lib
+	mkdir -p $(RELEASE_INCLUDE)
+	mkdir -p $(RELEASE_LIB)
+	cp *.h $(RELEASE_INCLUDE)
+	cp libSocket.a $(RELEASE_LIB)
 	
 Socket.o: Socket.cpp
 	$(CC) -c Socket.cpp
