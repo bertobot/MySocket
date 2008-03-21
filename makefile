@@ -19,8 +19,10 @@ lib: $(OBJ)
 	ar rs $(LIBNAME) $(OBJ)
 
 lib_release: lib
-	mkdir MySocketLib
-	cp *.h libSocket.a MySocketLib/
+	mkdir -p MySocket/include
+	mkdir -p MySocket/lib
+	cp *.h MySocket/include
+	cp libSocket.a MySocket/lib
 	
 Socket.o: Socket.cpp
 	$(CC) -c Socket.cpp
