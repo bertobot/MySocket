@@ -1,6 +1,6 @@
 CC=g++ -g3 -Wall
 RELEASE_DIR=MySocket_release
-RELEASE_LIB=$(RELEASE_DIR)/lib/MySocket
+RELEASE_LIB=$(RELEASE_DIR)/lib
 RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 
 OBJ=Socket.o \
