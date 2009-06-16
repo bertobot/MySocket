@@ -1,5 +1,7 @@
 CC=g++ -g3 -Wall
-DIR=`pwd`
+RELEASE_DIR=MySocket_release
+RELEASE_LIB=$(RELEASE_DIR)/lib
+RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 
 OBJ=Socket.o \
 ClientSocket.o \
@@ -19,8 +21,10 @@ lib: $(OBJ)
 	ar rs $(LIBNAME) $(OBJ)
 
 lib_release: lib
-	mkdir MySocketLib
-	cp *.h libSocket.a MySocketLib/
+	mkdir -p $(RELEASE_INCLUDE)
+	mkdir -p $(RELEASE_LIB)
+	cp *.h $(RELEASE_INCLUDE)
+	cp libSocket.a $(RELEASE_LIB)
 	
 install: lib
 	mkdir -p /usr/local/include/MySocket
