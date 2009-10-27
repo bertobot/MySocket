@@ -21,6 +21,7 @@
 #include <arpa/inet.h>
 #include <fcntl.h>
 
+#include <string.h>
 #include <string>
 /////////////////////////////////////////////////
 class Socket {

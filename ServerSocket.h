@@ -16,7 +16,7 @@
 class ServerSocket : public Socket {
 public:
     ServerSocket(int p);
-    ServerSocket(int p, int d, int t, int p, int s);
+    ServerSocket(int po, int d, int t, int p, int s);
 
     // accessors
 
