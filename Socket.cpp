@@ -86,11 +86,8 @@ void Socket::pull() {
 
    while (in == 1024) {
        bzero(buffer, 1024);
-       in = ::read(socket_descriptor, buffer, 1024);
+       in = ::read(socket_descriptor, buffer, sizeof(buffer) );
        std::string nstr(buffer);
-
-       // debug
-       printf("socket::pull: %s\n", nstr.c_str() );
 
        _buffer += nstr;
    }
