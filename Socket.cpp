@@ -75,7 +75,12 @@ int Socket::getProtocol() {
 }
 /////////////////////////////////////////////////
 std::string Socket::read() {
-   std::string newStr;
+    std::string result = _buffer;
+    _buffer.clear();
+    return result;
+}
+/////////////////////////////////////////////////
+void Socket::pull() {
    char buffer[1024];
    uint in = 1024;
 
@@ -83,11 +88,25 @@ std::string Socket::read() {
        bzero(buffer, 1024);
        in = ::read(socket_descriptor, buffer, 1024);
        std::string nstr(buffer);
-       newStr += nstr;
+       _buffer += nstr;
    }
 
    error = (in == 0);
-   return newStr;
+}
+/////////////////////////////////////////////////
+std::string Socket::readLine() {
+    std::string result;
+
+    for (uint i = 0; i < _buffer.size(); i++) {
+        if (_buffer[i] == '\n') {
+            result = _buffer.substr(0, i);
+            _buffer = _buffer.substr(i+1, _buffer.length() );
+            return result;
+        }
+    }
+
+    //TODO: fix this?
+    return _buffer;
 }
 /////////////////////////////////////////////////
 int Socket::write(const std::string &str) {
@@ -129,6 +148,18 @@ int Socket::makeNonBlocking() {
 int Socket::setOption(int level, int optname, int boolean) {
     // this, as of right now, is just a set-reuse-addr option
     return setsockopt(socket_descriptor, level, optname, &boolean, 1);
+}
+/////////////////////////////////////////////////
+bool Socket::hasBuffer() {
+    return ! _buffer.empty();
+}
+/////////////////////////////////////////////////
+void Socket::clearBuffer() {
+    _buffer.clear();
+}
+/////////////////////////////////////////////////
+std::string Socket::getBuffer() {
+    return _buffer;
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {

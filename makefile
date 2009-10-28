@@ -9,7 +9,8 @@ ServerSocket.o
 
 LIBNAME=libSocket.a
 
-all: lib server client
+#all: lib server client
+all: lib
 
 server: server.o $(OBJ)
 	$(CC) -o server server.o -L$(DIR) -lSocket

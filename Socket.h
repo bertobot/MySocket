@@ -47,7 +47,16 @@ public:
     int getShutdownMethod();
 
     // methods
+
     std::string read();
+    std::string readLine();
+    void pull();
+
+    bool hasBuffer();
+    void clearBuffer();
+
+    std::string getBuffer();
+
     int write(const std::string&);
 
     int setOption(int level, int optname, int boolean);
@@ -72,6 +81,7 @@ protected:
         shutdown_method;
 
     bool error;
+    std::string _buffer;
 };
 /////////////////////////////////////////////////
 #endif
