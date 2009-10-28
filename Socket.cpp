@@ -106,8 +106,7 @@ std::string Socket::readLine() {
         }
     }
 
-    //TODO: fix this?
-    return _buffer;
+    return read();
 }
 /////////////////////////////////////////////////
 int Socket::write(const std::string &str) {
