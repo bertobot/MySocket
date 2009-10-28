@@ -88,6 +88,10 @@ void Socket::pull() {
        bzero(buffer, 1024);
        in = ::read(socket_descriptor, buffer, 1024);
        std::string nstr(buffer);
+
+       // debug
+       printf("socket::pull: %s\n", nstr.c_str() );
+
        _buffer += nstr;
    }
 
@@ -100,7 +104,7 @@ std::string Socket::readLine() {
     for (uint i = 0; i < _buffer.size(); i++) {
         if (_buffer[i] == '\n') {
             result = _buffer.substr(0, i);
-            _buffer = _buffer.substr(i+1, _buffer.length() );
+            _buffer = _buffer.substr(i + 1, _buffer.length() );
             return result;
         }
     }
