@@ -74,13 +74,7 @@ int Socket::getProtocol() {
     return protocol;
 }
 /////////////////////////////////////////////////
-std::string Socket::read() {
-    std::string result = _buffer;
-    _buffer.clear();
-    return result;
-}
-/////////////////////////////////////////////////
-void Socket::pull() {
+void Socket::get() {
    char buffer[1024];
    uint in = 1024;
 
@@ -93,20 +87,6 @@ void Socket::pull() {
    }
 
    error = (in == 0);
-}
-/////////////////////////////////////////////////
-std::string Socket::readLine() {
-    std::string result;
-
-    for (uint i = 0; i < _buffer.size(); i++) {
-        if (_buffer[i] == '\n') {
-            result = _buffer.substr(0, i);
-            _buffer = _buffer.substr(i + 1, _buffer.length() );
-            return result;
-        }
-    }
-
-    return read();
 }
 /////////////////////////////////////////////////
 int Socket::write(const std::string &str) {
@@ -160,6 +140,60 @@ void Socket::clearBuffer() {
 /////////////////////////////////////////////////
 std::string Socket::getBuffer() {
     return _buffer;
+}
+/////////////////////////////////////////////////
+std::string Socket::read() {
+    std::string result = _buffer;
+    _buffer.clear();
+    return result;
+}
+/////////////////////////////////////////////////
+// readLine
+//
+// override socket's read to read from the string
+// buffer instead.  This function will return
+// a string terminated by a newline.  the newline
+// will not be part of the returned string.
+//
+std::string Socket::readLine() {
+    return upToNewline();
+}
+/////////////////////////////////////////////////
+// read(int length)
+//
+// same as read above, except instead of stopping
+// at newline, stops at length.
+//
+std::string Socket::read(int length) {
+    return upToLength(length);
+}
+/////////////////////////////////////////////////
+// read(int length)
+//
+// same as read above, except instead of stopping
+// at newline, stops at length.
+//
+std::string Socket::read(char c) {
+    return upToChar(c);
+}
+/////////////////////////////////////////////////
+std::string Socket::upToNewline() {
+    return upToChar('\n');
+}
+/////////////////////////////////////////////////
+std::string Socket::upToLength(int length) {
+    std::string substr = _buffer.substr(0, length);
+    _buffer.erase(0, length);
+
+    return substr;
+}
+/////////////////////////////////////////////////
+std::string Socket::upToChar(char c) {
+    int endpos = _buffer.find(c);
+    std::string substr = _buffer.substr(0, endpos);
+    _buffer.erase(0, endpos);
+
+    return substr;
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {

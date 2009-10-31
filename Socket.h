@@ -48,13 +48,14 @@ public:
 
     // methods
 
-    std::string read();
-    std::string readLine();
-    void pull();
+    virtual std::string read();
+    virtual std::string read(int);
+    virtual std::string read(char);
+    virtual std::string readLine();
+    virtual void get();
 
     bool hasBuffer();
     void clearBuffer();
-
     std::string getBuffer();
 
     int write(const std::string&);
@@ -71,6 +72,10 @@ public:
 private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
     void pre_init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
+
+    std::string upToNewline();
+    std::string upToLength(int);
+    std::string upToChar(char);
 
 protected:
     int
