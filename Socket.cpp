@@ -123,7 +123,7 @@ int Socket::close() {
     int rc = ::shutdown(socket_descriptor, 2);
     rc |= ::close(socket_descriptor);
 
-    printf("[Socket: close]\n");
+    printf("[Socket: close] %d, rc: %d\n", socket_descriptor, rc);
     socket_descriptor = -1;
     return rc;
 }
