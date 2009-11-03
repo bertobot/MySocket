@@ -191,7 +191,11 @@ std::string Socket::upToLength(int length) {
 std::string Socket::upToChar(char c) {
     int endpos = _buffer.find(c);
     std::string substr = _buffer.substr(0, endpos);
-    _buffer.erase(0, endpos);
+
+    if (endpos <= 0)
+        _buffer.clear();
+    else
+        _buffer.erase(0, endpos);
 
     return substr;
 }
