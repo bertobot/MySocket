@@ -13,7 +13,10 @@ SocketWatcher::SocketWatcher() : thread() {
 void SocketWatcher::watch(WatchedSocket *&ws) {
     if (ws) {
         socketMapMutex.lock();
+
         addToFDSet(ws->getSocketDescriptor() );
+        socketMap.insert(ws);
+
         socketMapMutex.unlock();
     }
 }
@@ -21,7 +24,12 @@ void SocketWatcher::watch(WatchedSocket *&ws) {
 void SocketWatcher::unwatch(WatchedSocket *&ws) {
     if (ws) {
         socketMapMutex.lock();
+
         removeFromFDSet(ws->getSocketDescriptor() );
+
+        std::set<WatchedSocket *>::iterator sitr = socketMap.find(ws);
+        socketMap.erase(sitr);
+
         socketMapMutex.unlock();
     }
 }
@@ -29,8 +37,10 @@ void SocketWatcher::unwatch(WatchedSocket *&ws) {
 bool SocketWatcher::isWatched(WatchedSocket *&ws) {
     bool t;
     socketMapMutex.lock();
+
     std::set<WatchedSocket *>::iterator sitr = socketMap.find(ws);
     t = (sitr != socketMap.end() );
+
     socketMapMutex.unlock();
 
     return t;
