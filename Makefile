@@ -5,7 +5,9 @@ RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 
 OBJ=Socket.o \
 ClientSocket.o \
-ServerSocket.o
+ServerSocket.o \
+SocketWatcher.o \
+WatchedSocket.o
 
 LIBNAME=libSocket.a
 
@@ -47,6 +49,12 @@ server.o: server.cpp
 
 client.o: client.cpp
 	$(CC) -c client.cpp
+
+WatchedSocket.o: WatchedSocket.cpp
+	$(CC) -c WatchedSocket.cpp
+
+SocketWatcher.o: SocketWatcher.cpp
+	$(CC) -c SocketWatcher.cpp
 
 clean:
 	rm -f *.o
