@@ -118,10 +118,8 @@ void SocketWatcher::run() {
         int ready = pselect(nfds, &read_fds, &write_fds, &error_fds, &ts, NULL);
 
         // signal watched sockets on event
-        if (ready > -1)
+        if (ready > 0)
             signalSockets();
-
-        printf("pselect returned %d\n", ready);
 
         // loop!
     }
