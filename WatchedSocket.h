@@ -4,6 +4,8 @@
 #include <MySocket/Socket.h>
 #include <MyThread/mutex.h>
 
+#include <errno.h>
+
 class WatchedSocket : public Socket {
 public:
     WatchedSocket();
@@ -18,6 +20,7 @@ public:
     void setEventError();
 
     bool waitForRead();
+    bool waitForWrite();
 
     void clearWatch();
 

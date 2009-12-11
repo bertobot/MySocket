@@ -56,7 +56,19 @@ void WatchedSocket::clearWatch() {
 bool WatchedSocket::waitForRead() {
     int nfds = 0;
     int result = pselect(nfds, NULL, NULL, NULL, &ts, NULL);
+    if (result < 0) {
+        printf("[waitForWrite] result %d, errno %d\n", result, errno);
+    }
     return canRead();
+}
+/////////////////////////////////////////////////
+bool WatchedSocket::waitForWrite() {
+    int nfds = 0;
+    int result = pselect(nfds, NULL, NULL, NULL, &ts, NULL);
+    if (result < 0) {
+        printf("[waitForWrite] result %d, errno %d\n", result, errno);
+    }
+    return canWrite();
 }
 /////////////////////////////////////////////////
 void WatchedSocket::setTimeout(long s, long ns) {

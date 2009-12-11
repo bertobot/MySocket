@@ -121,6 +121,10 @@ void SocketWatcher::run() {
         if (ready > 0)
             signalSockets();
 
+        if (ready < 0) {
+            printf("[waitForWrite] result %d, errno %d\n", ready, errno);
+        }
+
         // loop!
     }
 }
