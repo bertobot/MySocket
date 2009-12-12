@@ -101,6 +101,8 @@ void SocketWatcher::signalSockets() {
 /////////////////////////////////////////////////
 void SocketWatcher::run() {
 
+    signalSockets();
+
     while (!done) {
         // run pselect with timeout.
         // after pselect times out, check for events (fd_isset).
