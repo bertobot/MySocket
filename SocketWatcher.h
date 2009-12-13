@@ -43,8 +43,11 @@ private:
     void addToFDSet(int);
     void removeFromFDSet(int);
     void signalSockets();
+    void setAll();
+    void clrAll();
 
     long getHighestFD();
+    void removeDeadSockets();
 
 protected:
     fd_set

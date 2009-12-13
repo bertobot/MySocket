@@ -127,7 +127,7 @@ int Socket::makeNonBlocking() {
 /////////////////////////////////////////////////
 int Socket::setOption(int level, int optname, int boolean) {
     // this, as of right now, is just a set-reuse-addr option
-    return setsockopt(socket_descriptor, level, optname, &boolean, 1);
+    return setsockopt(socket_descriptor, level, optname, &boolean, sizeof(int) );
 }
 /////////////////////////////////////////////////
 bool Socket::hasBuffer() {

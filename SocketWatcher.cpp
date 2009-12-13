@@ -65,6 +65,38 @@ void SocketWatcher::init() {
     FD_ZERO(&error_fds);
 }
 /////////////////////////////////////////////////
+// setAll
+//
+// this method adds all the descriptors to the
+// fd set
+//
+void SocketWatcher::setAll() {
+    socketMapMutex.lock();
+
+    std::set<WatchedSocket *>::iterator sitr = socketMap.begin();
+    for (; sitr != socketMap.end(); sitr++) {
+        addToFDSet((*sitr)->getSocketDescriptor() );
+    }
+
+    socketMapMutex.unlock();
+}
+/////////////////////////////////////////////////
+// setAll
+//
+// this method adds all the descriptors to the
+// fd set
+//
+void SocketWatcher::clrAll() {
+    socketMapMutex.lock();
+
+    std::set<WatchedSocket *>::iterator sitr = socketMap.begin();
+    for (; sitr != socketMap.end(); sitr++) {
+        removeFromFDSet((*sitr)->getSocketDescriptor() );
+    }
+
+    socketMapMutex.unlock();
+}
+/////////////////////////////////////////////////
 // signalSockets
 //
 // this function has to signal the sockets whether
@@ -77,7 +109,6 @@ void SocketWatcher::signalSockets() {
     socketMapMutex.lock();
     std::set<WatchedSocket *>::iterator sitr = socketMap.begin();
     for (; sitr != socketMap.end(); sitr++) {
-        // TODO: check for dead sockets here?
         int d = (*sitr)->getSocketDescriptor();
         if (d > 0) {
             // remember, what we see as 'read', is a 'write' from the client sockets.
@@ -100,9 +131,6 @@ void SocketWatcher::signalSockets() {
 }
 /////////////////////////////////////////////////
 void SocketWatcher::run() {
-
-    signalSockets();
-
     while (!done) {
         // run pselect with timeout.
         // after pselect times out, check for events (fd_isset).
@@ -112,19 +140,30 @@ void SocketWatcher::run() {
         // check if added new sockets
         //      add sockets to set atomically!
 
+        // here, check for dead connections
+        removeDeadSockets();
 
         // set read fds to the list of file descriptors (fd's)
         // from the map that we have
 
+        clrAll();
+        init();
+        setAll();
+
+        struct timespec lts;
+
+        lts.tv_sec = ts.tv_sec;
+        lts.tv_nsec = ts.tv_nsec;
+
         int nfds = getHighestFD() + 1;
-        int ready = pselect(nfds, &read_fds, &write_fds, &error_fds, &ts, NULL);
+        int ready = pselect(nfds, &read_fds, &write_fds, &error_fds, &lts, NULL);
 
-        // signal watched sockets on event
-        if (ready > 0)
+        if (ready >= 0) {
+            // signal watched sockets on event
             signalSockets();
-
-        if (ready < 0) {
-            printf("[waitForWrite] result %d, errno %d\n", ready, errno);
+        }
+        else {
+            printf("[socketwatcher:run] result %d, errno %d\n", ready, errno);
         }
 
         // loop!
@@ -159,6 +198,20 @@ long SocketWatcher::getHighestFD() {
     socketMapMutex.unlock();
 
     return max;
+}
+/////////////////////////////////////////////////
+void SocketWatcher::removeDeadSockets() {
+    socketMapMutex.lock();
+
+    std::set<WatchedSocket *>::iterator sitr = socketMap.begin();
+    for (; sitr != socketMap.end(); sitr++) {
+        if (! (*sitr)->isValid() ) {
+            socketMap.erase(sitr);
+            delete (*sitr);
+            sitr = socketMap.begin();
+        }
+    }
+    socketMapMutex.unlock();
 }
 /////////////////////////////////////////////////
 SocketWatcher::~SocketWatcher() {
