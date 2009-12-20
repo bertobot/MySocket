@@ -95,6 +95,12 @@ int Socket::write(const std::string &str) {
     return len;
 }
 /////////////////////////////////////////////////
+int Socket::write(const std::string &str, int flags) {
+    //int len = ::write(socket_descriptor, str.c_str(), str.length() );
+    int len = ::send(socket_descriptor, str.c_str(), str.length(), flags);
+    return len;
+}
+/////////////////////////////////////////////////
 bool Socket::isValid() {
     return (socket_descriptor >= 0) && !error;
 }

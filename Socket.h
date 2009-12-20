@@ -59,6 +59,7 @@ public:
     std::string getBuffer();
 
     int write(const std::string&);
+    int write(const std::string&, int);
 
     int setOption(int level, int optname, int boolean);
 
