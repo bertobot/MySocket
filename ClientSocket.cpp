@@ -1,5 +1,9 @@
 #include "ClientSocket.h"
 /////////////////////////////////////////////////
+ClientSocket::ClientSocket() : Socket() {
+
+}
+/////////////////////////////////////////////////
 ClientSocket::ClientSocket(const std::string& addr, int po) : Socket() {
     init(addr, po);
 }

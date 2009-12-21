@@ -15,6 +15,7 @@
 /////////////////////////////////////////////////
 class ClientSocket : public Socket {
 public:
+    ClientSocket();
     ClientSocket(const std::string&, int);
     ClientSocket(const std::string&, int, int, int, int, int);
 
