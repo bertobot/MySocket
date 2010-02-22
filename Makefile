@@ -7,7 +7,8 @@ OBJ=Socket.o \
 ClientSocket.o \
 ServerSocket.o \
 SocketWatcher.o \
-WatchedSocket.o
+WatchedSocket.o \
+Select.o
 
 LIBNAME=libSocket.a
 
