@@ -52,9 +52,11 @@ public:
     virtual std::string read(int);
     virtual std::string read(char);
     virtual std::string readLine();
-    virtual void get();
+    int get(int size=8192);
+    int getByte();
 
     bool hasBuffer();
+    bool hasLine();
     void clearBuffer();
     std::string getBuffer();
 

@@ -74,19 +74,30 @@ int Socket::getProtocol() {
     return protocol;
 }
 /////////////////////////////////////////////////
-void Socket::get() {
-   char buffer[1024];
-   uint in = 1024;
+int Socket::get(int size) {
+    char buffer[size];
+    int in = size;
 
-   while (in == 1024) {
-       bzero(buffer, 1024);
-       in = ::read(socket_descriptor, buffer, sizeof(buffer) );
-       std::string nstr(buffer);
+    bzero(buffer, size);
+    in = ::read(socket_descriptor, buffer, sizeof(buffer) );
 
-       _buffer += nstr;
-   }
+    if (in > 0) {
+        std::string nstr(buffer);
+        _buffer += nstr;
+    }
 
-   error = (in == 0);
+    return in;
+}
+/////////////////////////////////////////////////
+int Socket::getByte() {
+    int buffer = -1;
+
+    int in = ::read(socket_descriptor, &buffer, sizeof(buffer) );
+
+    if (in > 0)
+        return buffer;
+
+    return -1;
 }
 /////////////////////////////////////////////////
 int Socket::write(const std::string &str) {
@@ -152,6 +163,15 @@ std::string Socket::read() {
     std::string result = _buffer;
     _buffer.clear();
     return result;
+}
+/////////////////////////////////////////////////
+bool Socket::hasLine() {
+    for (int i = 0; i < _buffer.length(); i++) {
+        if (_buffer[i] == '\n')
+            return true;
+    }
+
+    return false;
 }
 /////////////////////////////////////////////////
 // readLine
