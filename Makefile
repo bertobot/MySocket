@@ -62,3 +62,4 @@ clean:
 
 mrproper: clean
 	rm -f $(LIBNAME) client server 
+	rm -f *~

@@ -125,7 +125,7 @@ int Socket::close() {
     return rc;
 }
 /////////////////////////////////////////////////
-std::string Socket::getIP() {
+std::string Socket::getClientIP() {
     struct sockaddr_in client_sockaddr;
     int size = sizeof(client_sockaddr);
 
@@ -133,6 +133,18 @@ std::string Socket::getIP() {
     if (errorcheck == 0)
         return inet_ntoa (client_sockaddr.sin_addr);
     return "failed";
+}
+/////////////////////////////////////////////////
+long Socket::getClientPort() {
+    struct sockaddr_in client_sockaddr;
+    int size = sizeof(client_sockaddr);
+
+    int errorcheck = getsockname(socket_descriptor, (struct sockaddr*) &client_sockaddr, (socklen_t *) &size);
+
+    if (errorcheck == 0)
+        return client_sockaddr.sin_port;
+
+    return 0;
 }
 /////////////////////////////////////////////////
 int Socket::makeNonBlocking() {

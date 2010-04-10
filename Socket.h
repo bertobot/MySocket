@@ -65,10 +65,13 @@ public:
 
     int setOption(int level, int optname, int boolean);
 
-    virtual bool isValid();
-    virtual std::string getIP();
-    virtual int close();
-    virtual int makeNonBlocking();
+    bool isValid();
+
+    std::string getClientIP();
+    long getClientPort();
+
+    int close();
+    int makeNonBlocking();
 
     virtual ~Socket();
 
