@@ -31,10 +31,8 @@ lib_release: lib
 	cp libSocket.a $(RELEASE_LIB)
 	
 install: lib
-	mkdir -p /usr/local/include/MySocket
-	cp *.h /usr/local/include/MySocket
-	mkdir -p /usr/local/lib
-	cp *.a /usr/local/lib
+	install -D -m 666 *.h /usr/local/include/MySocket
+	install -D -m 666 *.a /usr/local/lib
 
 Socket.o: Socket.cpp
 	$(CC) -c Socket.cpp
