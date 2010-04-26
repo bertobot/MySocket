@@ -90,12 +90,13 @@ int Socket::get(int size) {
 }
 /////////////////////////////////////////////////
 int Socket::getByte() {
-    int buffer = -1;
+    char buffer[1];
 
     int in = ::read(socket_descriptor, &buffer, sizeof(buffer) );
+    int p = (int)buffer[0];
 
     if (in > 0)
-        return buffer;
+        return p;
 
     return -1;
 }
@@ -227,6 +228,7 @@ std::string Socket::upToLength(int length) {
 }
 /////////////////////////////////////////////////
 std::string Socket::upToChar(char c) {
+    /*
     int endpos = _buffer.find(c) + 1;
     std::string substr = _buffer.substr(0, endpos);
 
@@ -236,6 +238,27 @@ std::string Socket::upToChar(char c) {
         _buffer.erase(0, endpos);
 
     return substr;
+    */
+
+    std::string result;
+
+    int t = -1;
+
+    do {
+        t = getByte();
+
+        if (t < 0)
+            break;
+
+        // debug
+        //printf ("socket read: %c, %d\n", t, t);
+
+        result += (char)t;
+        if (t == c)
+            break;
+    } while (t != -1);
+
+    return result;
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {
