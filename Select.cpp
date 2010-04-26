@@ -72,6 +72,8 @@ void Select::prepare() {
     clear();
     std::vector<int>::iterator itr = fds.begin();
     for (; itr != fds.end(); itr++) {
+        init();
+        remove_fd(*itr);
         add_fd(*itr);
     }
 }
