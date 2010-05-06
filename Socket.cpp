@@ -95,7 +95,7 @@ int Socket::getByte() {
     int in = ::read(socket_descriptor, &buffer, sizeof(buffer) );
     int p = (int)buffer[0];
 
-    if (in > 0)
+    if (in >= 0)
         return p;
 
     return -1;
