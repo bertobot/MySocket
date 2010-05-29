@@ -48,7 +48,6 @@ public:
 
     // methods
 
-    virtual std::string read();
     virtual std::string read(int);
     virtual std::string read(char);
     virtual std::string readLine();

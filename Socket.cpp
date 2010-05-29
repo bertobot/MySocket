@@ -172,12 +172,6 @@ std::string Socket::getBuffer() {
     return _buffer;
 }
 /////////////////////////////////////////////////
-std::string Socket::read() {
-    std::string result = _buffer;
-    _buffer.clear();
-    return result;
-}
-/////////////////////////////////////////////////
 bool Socket::hasLine() {
     for (int i = 0; i < _buffer.length(); i++) {
         if (_buffer[i] == '\n')
@@ -221,10 +215,26 @@ std::string Socket::upToNewline() {
 }
 /////////////////////////////////////////////////
 std::string Socket::upToLength(int length) {
-    std::string substr = _buffer.substr(0, length);
-    _buffer.erase(0, length);
+    std::string result;
 
-    return substr;
+    int t = -1;
+    int count = 0;
+
+    do {
+        t = getByte();
+
+        if (t < 0)
+            break;
+
+        // debug
+        //printf ("socket read: %c, %d\n", t, t);
+
+        result += (char)t;
+	count++;
+
+    } while (t != -1 && count < length);
+
+    return result;
 }
 /////////////////////////////////////////////////
 std::string Socket::upToChar(char c) {
