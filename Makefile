@@ -6,8 +6,6 @@ RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 OBJ=Socket.o \
 ClientSocket.o \
 ServerSocket.o \
-SocketWatcher.o \
-WatchedSocket.o \
 Select.o
 
 LIBNAME=libSocket.a
