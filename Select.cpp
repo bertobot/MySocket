@@ -124,6 +124,17 @@ void Select::setTimeout(long s, long ns) {
     ts.tv_nsec = ns;
 }
 /////////////////////////////////////////////////
+void Select::setTimeout(double t) {
+    // first, get the base
+    long t1 = t / 1;
+    double t2 = (t / 1.0) - t1;
+
+    // 1 billion nanos = 1 second
+    long t3 = t2 * 1000000000;
+
+    setTimeout(t1, t3);
+}
+/////////////////////////////////////////////////
 Select::~Select() {
 
 }

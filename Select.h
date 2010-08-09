@@ -24,6 +24,7 @@ public:
     void wait();
 
     void setTimeout(long sec, long nsec);
+    void setTimeout(double t);
 
     virtual ~Select();
 
