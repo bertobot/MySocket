@@ -75,18 +75,29 @@ int Socket::getProtocol() {
 }
 /////////////////////////////////////////////////
 int Socket::get(int size) {
-    char buffer[size];
-    int in = size;
+    char *buffer = new char[size];
+
+	int count = 0;
+	int left = 0;
 
     bzero(buffer, size);
-    in = ::read(socket_descriptor, buffer, sizeof(buffer) );
 
-    if (in > 0) {
-        std::string nstr(buffer);
-        _buffer += nstr;
-    }
+	while (left < size) {
+		count = ::read(socket_descriptor, buffer, (size - left) );
 
-    return in;
+		if (count > 0) {
+			for (int i = 0; i < count; i++) {
+				_buffer += buffer[i];
+			}
+		}
+
+		else
+			return left;
+
+		left += count;
+	}
+
+    return size;
 }
 /////////////////////////////////////////////////
 int Socket::getByte() {
@@ -217,22 +228,31 @@ std::string Socket::upToNewline() {
 std::string Socket::upToLength(int length) {
     std::string result;
 
-    int t = -1;
+	char *buffer = new char[length];
+
     int count = 0;
+	int left = 0;
 
-    do {
-        t = getByte();
+	while (left < length) {
+    	count = ::read(socket_descriptor, buffer, (length - left) );
 
-        if (t < 0)
-            break;
+		// debug
+		printf("upToLength: %d / %d\n", left, length);
 
-        // debug
-        //printf ("socket read: %c, %d\n", t, t);
+		if (count < 0) {
+			printf("there was an error reading from socket.\n");
+			break;
+		}
 
-        result += (char)t;
-	count++;
+		// copy bits over
+		for (int i = 0; i < count; i++) {
+			result += buffer[i];
+		}
 
-    } while (t != -1 && count < length);
+		left += count;
+	}
+
+	delete [] buffer;
 
     return result;
 }
