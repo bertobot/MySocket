@@ -1,7 +1,7 @@
 #include "ClientSocket.h"
 /////////////////////////////////////////////////
 ClientSocket::ClientSocket() : Socket() {
-
+	server = NULL;
 }
 /////////////////////////////////////////////////
 ClientSocket::ClientSocket(const std::string& addr, int po) : Socket() {
@@ -23,13 +23,20 @@ void ClientSocket::init(const std::string& addr, int p) {
     port = p;
 
     bzero( (char*)&my_sockaddr, sizeof(my_sockaddr) );
-    server = gethostbyname(server_address.c_str() );
 
-    my_sockaddr.sin_family = domain;
-    bcopy(
-        (char *)server->h_addr,
-        (char *)&my_sockaddr.sin_addr.s_addr,
-        server->h_length );
+	if (! server) {
+		server = gethostbyname(server_address.c_str() );
+		if (! server) {
+			error = true;
+			return;
+		}
+
+		my_sockaddr.sin_family = domain;
+		bcopy(
+			(char *)server->h_addr,
+			(char *)&my_sockaddr.sin_addr.s_addr,
+			server->h_length );
+	}
 
     my_sockaddr.sin_port = htons(port);
 }
