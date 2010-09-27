@@ -5,6 +5,7 @@ ClientSocket::ClientSocket() : Socket() {
 }
 /////////////////////////////////////////////////
 ClientSocket::ClientSocket(const std::string& addr, int po) : Socket() {
+    server = NULL;
     init(addr, po);
 }
 /////////////////////////////////////////////////
@@ -15,6 +16,7 @@ ClientSocket::ClientSocket(const std::string& address,
             int p,
             int s) : Socket(d, t, p, s) {
 
+    server = NULL;
     init(address, po);
 }
 /////////////////////////////////////////////////
