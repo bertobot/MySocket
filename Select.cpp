@@ -70,9 +70,10 @@ void Select::init() {
 /////////////////////////////////////////////////
 void Select::prepare() {
     clear();
+    init();
+
     std::vector<int>::iterator itr = fds.begin();
     for (; itr != fds.end(); itr++) {
-        init();
         remove_fd(*itr);
         add_fd(*itr);
     }
