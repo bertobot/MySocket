@@ -9,6 +9,11 @@ ClientSocket::ClientSocket(const std::string& addr, int po) : Socket() {
     init(addr, po);
 }
 /////////////////////////////////////////////////
+ClientSocket::ClientSocket(const std::string& addr, int po, struct hostent*s) : Socket() {
+    server = s;
+    init(addr, po);
+}
+/////////////////////////////////////////////////
 ClientSocket::ClientSocket(const std::string& address,
             int po,
             int d,
@@ -50,6 +55,10 @@ bool ClientSocket::connect() {
 /////////////////////////////////////////////////
 bool ClientSocket::isConnected() {
     return !(id < 0);
+}
+/////////////////////////////////////////////////
+struct hostent * ClientSocket::getServer() {
+	return server;
 }
 /////////////////////////////////////////////////
 ClientSocket::~ClientSocket() {

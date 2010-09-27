@@ -17,10 +17,13 @@ class ClientSocket : public Socket {
 public:
     ClientSocket();
     ClientSocket(const std::string&, int);
+    ClientSocket(const std::string&, int, struct hostent*);
     ClientSocket(const std::string&, int, int, int, int, int);
 
     bool connect();
     bool isConnected();
+
+	struct hostent * getServer();
 
     virtual ~ClientSocket();
 
