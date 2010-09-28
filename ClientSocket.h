@@ -17,10 +17,12 @@ class ClientSocket : public Socket {
 public:
     ClientSocket();
     ClientSocket(const std::string&, int);
+    ClientSocket(const std::string&, const std::string&);
     ClientSocket(const std::string&, int, struct hostent*);
     ClientSocket(const std::string&, int, int, int, int, int);
 
     bool connect();
+    bool connect2();
     bool isConnected();
 
 	struct hostent * getServer();
@@ -29,6 +31,7 @@ public:
 
 private:
     void init(const std::string&, int);
+    void setSockAddr(const std::string&, const std::string&);
 
 protected:
     std::string server_address;
@@ -37,6 +40,7 @@ protected:
 
     struct sockaddr_in my_sockaddr;
     struct hostent *server;
+    addrinfo *addr_result;
 };
 /////////////////////////////////////////////////
 #endif
