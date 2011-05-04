@@ -72,6 +72,9 @@ public:
     int close();
     int makeNonBlocking();
 
+	int getDebug();
+	void setDebug(int d);
+
     virtual ~Socket();
 
 private:
@@ -92,6 +95,8 @@ protected:
 
     bool error;
     std::string _buffer;
+
+	int debug;
 };
 /////////////////////////////////////////////////
 #endif
