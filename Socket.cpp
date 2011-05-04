@@ -129,11 +129,11 @@ bool Socket::isValid() {
 }
 /////////////////////////////////////////////////
 int Socket::close() {
-	// TODO: commented out shutdown, as it does NOT destroy a socket, only controls flow.
-    //int rc = ::shutdown(socket_descriptor, 2);
-    int rc = ::close(socket_descriptor);
+    printf("[Socket: close] %d\n", socket_descriptor);
 
-    printf("[Socket: close] %d, rc: %d\n", socket_descriptor, rc);
+    int rc = ::shutdown(socket_descriptor, 2);
+    rc = ::close(socket_descriptor);
+
     socket_descriptor = -1;
     return rc;
 }
@@ -185,7 +185,7 @@ std::string Socket::getBuffer() {
 }
 /////////////////////////////////////////////////
 bool Socket::hasLine() {
-    for (int i = 0; i < _buffer.length(); i++) {
+    for (unsigned int i = 0; i < _buffer.length(); i++) {
         if (_buffer[i] == '\n')
             return true;
     }
