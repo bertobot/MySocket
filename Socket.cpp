@@ -129,8 +129,9 @@ bool Socket::isValid() {
 }
 /////////////////////////////////////////////////
 int Socket::close() {
-    int rc = ::shutdown(socket_descriptor, 2);
-    rc |= ::close(socket_descriptor);
+	// TODO: commented out shutdown, as it does NOT destroy a socket, only controls flow.
+    //int rc = ::shutdown(socket_descriptor, 2);
+    int rc = ::close(socket_descriptor);
 
     printf("[Socket: close] %d, rc: %d\n", socket_descriptor, rc);
     socket_descriptor = -1;
