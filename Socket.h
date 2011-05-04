@@ -96,7 +96,7 @@ protected:
     bool error;
     std::string _buffer;
 
-	int debug;
+	int _debug;
 };
 /////////////////////////////////////////////////
 #endif

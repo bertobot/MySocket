@@ -6,7 +6,7 @@ void Socket::pre_init(int d, int t, int p, int s) {
     protocol = p;
     shutdown_method = s;
 
-	debug = 0;
+	_debug = 0;
 
     error = false;
 }
@@ -132,7 +132,7 @@ bool Socket::isValid() {
 }
 /////////////////////////////////////////////////
 int Socket::close() {
-	if (debug > 0)
+	if (_debug > 0)
     	printf("[Socket: close] %d\n", socket_descriptor);
 
     int rc = ::shutdown(socket_descriptor, 2);
@@ -241,12 +241,11 @@ std::string Socket::upToLength(int length) {
 	while (left < length) {
     	count = ::read(socket_descriptor, buffer, (length - left) );
 
-		// debug
-		if (debug > 0)
+		if (_debug > 0)
 			printf("upToLength: %d / %d\n", left, length);
 
 		if (count < 0) {
-			if (debug > 0)
+			if (_debug > 0)
 				printf("there was an error reading from socket.\n");
 			break;
 		}
@@ -287,7 +286,7 @@ std::string Socket::upToChar(char c) {
         if (t < 0)
             break;
 
-		if (debug > 0)
+		if (_debug > 0)
 			printf ("socket read: %c, %d\n", t, t);
 
         result += (char)t;
@@ -299,11 +298,11 @@ std::string Socket::upToChar(char c) {
 }
 /////////////////////////////////////////////////
 void Socket::setDebug(int d) {
-	debug = d;
+	_debug = d;
 }
 /////////////////////////////////////////////////
 int Socket::getDebug() {
-	return debug;
+	return _debug;
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {
