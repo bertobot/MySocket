@@ -69,12 +69,10 @@ void Select::init() {
 }
 /////////////////////////////////////////////////
 void Select::prepare() {
-    clear();
-    init();
+	init();
 
     std::vector<int>::iterator itr = fds.begin();
     for (; itr != fds.end(); itr++) {
-        remove_fd(*itr);
         add_fd(*itr);
     }
 }
@@ -83,7 +81,8 @@ void Select::clear() {
     init();
 }
 /////////////////////////////////////////////////
-int Select::canRead() {
+std::vector<int> Select::canRead() {
+    std::vector<int> result;
     struct timespec lts;
 
     lts.tv_sec = ts.tv_sec;
@@ -94,10 +93,26 @@ int Select::canRead() {
     int nfds = max + 1;
     //int ready = pselect(nfds, &read_fds, &write_fds, &error_fds, &lts, NULL);
     int ready = pselect(nfds, &read_fds, NULL, NULL, &lts, NULL);
-    return ready;
+
+    //printf("ready: %d\n", ready);
+
+    if (ready == -1) {
+        // TODO: EXCEPTION
+        printf("exception in Select: %s\n", strerror(errno) );
+        return result;
+    }
+
+    for (int i = 0; i < nfds; i++) {
+        if (FD_ISSET(i, &read_fds) ) {
+            result.push_back(i);
+        }
+    }
+
+    return result;
 }
 /////////////////////////////////////////////////
-int Select::canWrite() {
+std::vector<int> Select::canWrite() {
+    std::vector<int> result;
     struct timespec lts;
 
     lts.tv_sec = ts.tv_sec;
@@ -107,7 +122,48 @@ int Select::canWrite() {
 
     int nfds = max + 1;
     int ready = pselect(nfds, NULL, &write_fds, NULL, &lts, NULL);
-    return ready;
+
+    if (ready == -1) {
+        // TODO: EXCEPTION
+        printf("exception in Select: %s\n", strerror(errno) );
+        return result;
+    }
+
+    for (int i = 0; i < nfds; i++) {
+        if (FD_ISSET(i, &write_fds) )
+            result.push_back(i);
+    }
+
+    return result;
+}
+/////////////////////////////////////////////////
+std::vector<int> Select::canReadWrite() {
+    std::vector<int> result;
+    struct timespec lts;
+
+    lts.tv_sec = ts.tv_sec;
+    lts.tv_nsec = ts.tv_nsec;
+
+    prepare();
+
+    int nfds = max + 1;
+    int ready = pselect(nfds, &read_fds, &write_fds, NULL, &lts, NULL);
+
+    if (ready == -1) {
+        // TODO: EXCEPTION
+        printf("exception in Select: %s\n", strerror(errno) );
+        return result;
+    }
+
+    for (int i = 0; i < nfds; i++) {
+        if (FD_ISSET(i, &read_fds) )
+            result.push_back(i);
+
+		else if (FD_ISSET(i, &write_fds) )
+			result.push_back(i);
+    }
+
+    return result;
 }
 /////////////////////////////////////////////////
 void Select::wait() {

@@ -7,14 +7,18 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <errno.h>
+#include <string.h>
+#include <stdio.h>
 
 class Select {
 public:
     Select();
     Select(const std::vector<int>&);
 
-    int canRead();
-    int canWrite();
+    std::vector<int> canRead();
+    std::vector<int> canWrite();
+    std::vector<int> canReadWrite();
+    
     bool hasEventError();
 
     void add(int);
