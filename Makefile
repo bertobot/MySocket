@@ -29,6 +29,7 @@ lib_release: lib
 	cp libSocket.a $(RELEASE_LIB)
 	
 install: lib
+	mkdir -p /usr/local/include/MySocket
 	install -D -m 666 *.h /usr/local/include/MySocket
 	install -D -m 666 *.a /usr/local/lib
 
