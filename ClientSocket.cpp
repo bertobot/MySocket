@@ -112,6 +112,8 @@ struct hostent * ClientSocket::getServer() {
 	return server;
 }
 /////////////////////////////////////////////////
+// TODO: implement sendto and recvfrom
+/////////////////////////////////////////////////
 ClientSocket::~ClientSocket() {
     if (addr_result)
         freeaddrinfo(addr_result);

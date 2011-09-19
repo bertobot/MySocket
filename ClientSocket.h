@@ -27,6 +27,11 @@ public:
 
 	struct hostent * getServer();
 
+    // TODO: implement
+    
+    int recvfrom();
+    int sendto();
+
     virtual ~ClientSocket();
 
 private:
