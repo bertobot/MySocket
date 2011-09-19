@@ -16,7 +16,7 @@ bool ServerSocket::isBound() {
     return !(id < 0);
 }
 /////////////////////////////////////////////////
-ServerSocket::ServerSocket(int po, int d, int t, int p, int s) : Socket (d, t, p, s) {
+ServerSocket::ServerSocket(int po, int t, int d, int p, int s) : Socket (t, d, p, s) {
     init(po);
 }
 /////////////////////////////////////////////////

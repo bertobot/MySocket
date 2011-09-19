@@ -9,6 +9,8 @@ void Socket::pre_init(int d, int t, int p, int s) {
 	_debug = 0;
 
     error = false;
+
+    socketType = TCP;
 }
 /////////////////////////////////////////////////
 void Socket::init(int d, int t, int p, int s) {
@@ -20,7 +22,7 @@ Socket::Socket() {
     init();
 }
 /////////////////////////////////////////////////
-Socket::Socket(int d, int t, int p, int s) {
+Socket::Socket(int t, int d, int p, int s) {
     init(d, t, p, s);
 }
 /////////////////////////////////////////////////

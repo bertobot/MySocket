@@ -27,8 +27,8 @@
 class Socket {
 public:
     Socket();
-    Socket(int);
-    Socket(int, int, int, int);
+    Socket(int descriptor);
+    Socket(int type, int domain, int protocol, int shutdownMethod);
     Socket(const Socket&);
     Socket operator =(const Socket &rhs);
 

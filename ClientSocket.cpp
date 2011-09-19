@@ -25,10 +25,10 @@ ClientSocket::ClientSocket(const std::string& addr, const std::string &service) 
 /////////////////////////////////////////////////
 ClientSocket::ClientSocket(const std::string& address,
             int po,
-            int d,
             int t,
+            int d,            
             int p,
-            int s) : Socket(d, t, p, s) {
+            int s) : Socket(t, d,  p, s) {
 
     server = NULL;
     init(address, po);
