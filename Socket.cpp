@@ -6,7 +6,7 @@ void Socket::pre_init(int d, int t, int p, int s) {
     protocol = p;
     shutdown_method = s;
 
-	_debug = 0;
+    _debug = 0;
 
     error = false;
 }
@@ -77,54 +77,79 @@ int Socket::getProtocol() {
     return protocol;
 }
 /////////////////////////////////////////////////
-int Socket::get(int size) {
-    char *buffer = new char[size];
+/**
+ * get(char * buffer, int size)
+ *
+ * this method fetches data of 'size' length, and stores it
+ * the provided char buffer.
+ */
+int Socket::get(char * buffer, int size) {
 
-	int count = 0;
-	int left = 0;
+    if (! buffer) {
+	return -1;
+    }
 
-    bzero(buffer, size);
-
-	while (left < size) {
-		count = ::read(socket_descriptor, buffer, (size - left) );
-
-		if (count > 0) {
-			for (int i = 0; i < count; i++) {
-				_buffer += buffer[i];
-			}
-		}
-
-		else
-			return left;
-
-		left += count;
-	}
-
-    return size;
+    int count = ::read(socket_descriptor, buffer, size);
+    return count;
 }
 /////////////////////////////////////////////////
-int Socket::getByte() {
+/**
+ * get(char * buffer, int size)
+ *
+ * this method fetches data of 'size' length, and stores it
+ * the provided char buffer.
+ */
+int Socket::get(char * buffer, int size, int flags) {
+
+    if (! buffer) {
+	return -1;
+    }
+
+    int count = ::recv(socket_descriptor, buffer, size, flags);
+    return count;
+}
+/////////////////////////////////////////////////
+char Socket::getByte() {
     char buffer[1];
 
     int in = ::read(socket_descriptor, &buffer, sizeof(buffer) );
-    int p = (int)buffer[0];
-
+    
     if (in >= 0)
-        return p;
+        return buffer[0];
 
     return -1;
 }
 /////////////////////////////////////////////////
-int Socket::write(const std::string &str) {
-    int len = ::write(socket_descriptor, str.c_str(), str.length() );
-    //int len = ::send(socket_descriptor, str.c_str(), str.length() );
-    return len;
+char Socket::getByte(int flags) {
+    char buffer[1];
+
+    int in = ::recv(socket_descriptor, &buffer, sizeof(buffer), flags);
+
+    if (in >= 0)
+        return buffer[0];
+
+    return -1;
 }
 /////////////////////////////////////////////////
-int Socket::write(const std::string &str, int flags) {
-    //int len = ::write(socket_descriptor, str.c_str(), str.length() );
-    int len = ::send(socket_descriptor, str.c_str(), str.length(), flags);
-    return len;
+int Socket::put(char* buffer, int size)
+{
+    return ::write(socket_descriptor, buffer, size);
+}
+/////////////////////////////////////////////////
+int Socket::put(char* buffer, int size, int flags)
+{
+    return ::send(socket_descriptor, buffer, size, flags);
+}
+
+/////////////////////////////////////////////////
+int Socket::putByte(char c)
+{
+    return ::write(socket_descriptor, &c, 1);
+}
+/////////////////////////////////////////////////
+int Socket::putByte(char c, int flags)
+{
+    return ::send(socket_descriptor, &c, 1, flags);
 }
 /////////////////////////////////////////////////
 bool Socket::isValid() {
@@ -132,8 +157,8 @@ bool Socket::isValid() {
 }
 /////////////////////////////////////////////////
 int Socket::close() {
-	if (_debug > 0)
-    	printf("[Socket: close] %d\n", socket_descriptor);
+    if (_debug > 0)
+	printf("[Socket: close] %d\n", socket_descriptor);
 
     int rc = ::shutdown(socket_descriptor, 2);
     rc = ::close(socket_descriptor);
@@ -176,25 +201,12 @@ int Socket::setOption(int level, int optname, int boolean) {
     return setsockopt(socket_descriptor, level, optname, &boolean, sizeof(int) );
 }
 /////////////////////////////////////////////////
-bool Socket::hasBuffer() {
-    return ! _buffer.empty();
+void Socket::setDebug(int d) {
+	_debug = d;
 }
 /////////////////////////////////////////////////
-void Socket::clearBuffer() {
-    _buffer.clear();
-}
-/////////////////////////////////////////////////
-std::string Socket::getBuffer() {
-    return _buffer;
-}
-/////////////////////////////////////////////////
-bool Socket::hasLine() {
-    for (unsigned int i = 0; i < _buffer.length(); i++) {
-        if (_buffer[i] == '\n')
-            return true;
-    }
-
-    return false;
+int Socket::getDebug() {
+	return _debug;
 }
 /////////////////////////////////////////////////
 // readLine
@@ -205,77 +217,6 @@ bool Socket::hasLine() {
 // will not be part of the returned string.
 //
 std::string Socket::readLine() {
-    return upToNewline();
-}
-/////////////////////////////////////////////////
-// read(int length)
-//
-// same as read above, except instead of stopping
-// at newline, stops at length.
-//
-std::string Socket::read(int length) {
-    return upToLength(length);
-}
-/////////////////////////////////////////////////
-// read(int length)
-//
-// same as read above, except instead of stopping
-// at newline, stops at length.
-//
-std::string Socket::read(char c) {
-    return upToChar(c);
-}
-/////////////////////////////////////////////////
-std::string Socket::upToNewline() {
-    return upToChar('\n');
-}
-/////////////////////////////////////////////////
-std::string Socket::upToLength(int length) {
-    std::string result;
-
-	char *buffer = new char[length];
-
-    int count = 0;
-	int left = 0;
-
-	while (left < length) {
-    	count = ::read(socket_descriptor, buffer, (length - left) );
-
-		if (_debug > 0)
-			printf("upToLength: %d / %d\n", left, length);
-
-		if (count < 0) {
-			if (_debug > 0)
-				printf("there was an error reading from socket.\n");
-			break;
-		}
-
-		// copy bits over
-		for (int i = 0; i < count; i++) {
-			result += buffer[i];
-		}
-
-		left += count;
-	}
-
-	delete [] buffer;
-
-    return result;
-}
-/////////////////////////////////////////////////
-std::string Socket::upToChar(char c) {
-    /*
-    int endpos = _buffer.find(c) + 1;
-    std::string substr = _buffer.substr(0, endpos);
-
-    if (endpos <= 0)
-        _buffer.clear();
-    else
-        _buffer.erase(0, endpos);
-
-    return substr;
-    */
-
     std::string result;
 
     int t = -1;
@@ -283,26 +224,37 @@ std::string Socket::upToChar(char c) {
     do {
         t = getByte();
 
-        if (t < 0)
+	if (t < 0)
             break;
 
-		if (_debug > 0)
-			printf ("socket read: %c, %d\n", t, t);
+	if (_debug > 0)
+	    printf ("socket read: %c, %d\n", t, t);
+
+	if (t == '\n')
+	    break;
 
         result += (char)t;
-        if (t == c)
-            break;
+
     } while (t != -1);
+
+    int len = result.size() - 1;
+
+    if (result[len] == '\r')
+	result = result.substr(0, len);
 
     return result;
 }
 /////////////////////////////////////////////////
-void Socket::setDebug(int d) {
-	_debug = d;
+int Socket::write(const std::string &str) {
+    int len = ::write(socket_descriptor, str.c_str(), str.length() );
+    //int len = ::send(socket_descriptor, str.c_str(), str.length() );
+    return len;
 }
 /////////////////////////////////////////////////
-int Socket::getDebug() {
-	return _debug;
+int Socket::write(const std::string &str, int flags) {
+    //int len = ::write(socket_descriptor, str.c_str(), str.length() );
+    int len = ::send(socket_descriptor, str.c_str(), str.length(), flags);
+    return len;
 }
 /////////////////////////////////////////////////
 Socket::~Socket() {

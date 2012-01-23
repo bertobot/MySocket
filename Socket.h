@@ -48,19 +48,17 @@ public:
 
     // methods
 
-    virtual std::string read(int);
-    virtual std::string read(char);
-    virtual std::string readLine();
-    int get(int size=8192);
-    int getByte();
+    int get(char *buffer, int size);
+    int get(char *buffer, int size, int flags);
+    
+    char getByte();
+    char getByte(int flags);
 
-    bool hasBuffer();
-    bool hasLine();
-    void clearBuffer();
-    std::string getBuffer();
-
-    int write(const std::string&);
-    int write(const std::string&, int);
+    int put(char *buffer, int size);
+    int put(char *buffer, int size, int flags);
+    
+    int putByte(char c);
+    int putByte(char c, int flags);
 
     int setOption(int level, int optname, int boolean);
 
@@ -72,18 +70,18 @@ public:
     int close();
     int makeNonBlocking();
 
-	int getDebug();
-	void setDebug(int d);
+    int getDebug();
+    void setDebug(int d);
+
+    std::string readLine();
+    int write(const std::string& str);
+    int write(const std::string& str, int flags);
 
     virtual ~Socket();
 
 private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
     void pre_init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
-
-    std::string upToNewline();
-    std::string upToLength(int);
-    std::string upToChar(char);
 
 protected:
     int
@@ -94,9 +92,7 @@ protected:
         shutdown_method;
 
     bool error;
-    std::string _buffer;
-
-	int _debug;
+    int _debug;
 };
 /////////////////////////////////////////////////
 #endif
