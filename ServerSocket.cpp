@@ -9,7 +9,14 @@ void ServerSocket::init(int po) {
     my_sockaddr.sin_addr.s_addr = INADDR_ANY;
     my_sockaddr.sin_port = htons(port);
 
-    id = bind(socket_descriptor, (struct sockaddr *)&my_sockaddr, sizeof(my_sockaddr) );
+    // set to always reuse addr.
+    int boolean = 1;
+
+    if (setsockopt(socket_descriptor, SOL_SOCKET, SO_REUSEADDR, &boolean, sizeof(int) ) == 0)
+	id = bind(socket_descriptor, (struct sockaddr *)&my_sockaddr, sizeof(my_sockaddr) );
+    else
+	id = -1;
+
 }
 /////////////////////////////////////////////////
 bool ServerSocket::isBound() {
