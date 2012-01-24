@@ -75,7 +75,8 @@ public:
 
     std::string readLine();
     int write(const std::string& str);
-    int write(const std::string& str, int flags);
+    int write(const std::string& str, int flags);    
+    int writeLine(const std::string& str);
 
     virtual ~Socket();
 

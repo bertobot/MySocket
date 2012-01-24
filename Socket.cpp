@@ -257,6 +257,12 @@ int Socket::write(const std::string &str, int flags) {
     return len;
 }
 /////////////////////////////////////////////////
+int Socket::writeLine(const std::string &str) {
+    std::string package = str + "\r\n";
+    int len = ::write(socket_descriptor, package.c_str(), package.length() );
+    return len;
+}
+/////////////////////////////////////////////////
 Socket::~Socket() {
 // 07.12.2006 - berto
 // don't auto-destruct.
