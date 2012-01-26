@@ -34,6 +34,7 @@ public:
     int write(char *buffer, int size, int flags=MSG_NOSIGNAL);
 
     void clear();
+    void close();
 
     virtual ~DatagramPacket();
 

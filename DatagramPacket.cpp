@@ -2,15 +2,17 @@
 /////////////////////////////////////////////////
 DatagramPacket::DatagramPacket()
 {
-    sock = -1;
     remoteaddr = NULL;
     addrresult = NULL;
+
+    init();
 }
 /////////////////////////////////////////////////
 DatagramPacket::DatagramPacket(const std::string& addr, const std::string& port)
 {
     this->address = addr;
     this->port = port;
+    init();
 }
 /////////////////////////////////////////////////
 int DatagramPacket::getSocketDescriptor()
@@ -61,6 +63,11 @@ void DatagramPacket::clear()
 {
     // clear result
     freeaddrinfo(addrresult);
+}
+/////////////////////////////////////////////////
+void DatagramPacket::close()
+{
+    ::close(sock);
 }
 /////////////////////////////////////////////////
 DatagramPacket::~DatagramPacket()

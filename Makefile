@@ -22,6 +22,10 @@ server: server.o $(OBJ)
 client: client.o $(OBJ)
 	$(CC) -o client client.o -L$(DIR) -lSocket
 
+udp: udpclient.o udpserver.o $(OBJ)
+	$(CC) -o udpclient udpclient.o $(OBJ) -lSocket
+	$(CC) -o udpserver udpserver.o $(OBJ) -lSocket
+
 lib: $(OBJ)
 	ar rs $(LIBNAME) $(OBJ)
 
@@ -43,5 +47,5 @@ clean:
 	rm -f *.o
 
 mrproper: clean
-	rm -f $(LIBNAME) client server 
+	rm -f $(LIBNAME) client server udpclient udpserver
 	rm -f *~

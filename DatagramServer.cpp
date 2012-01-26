@@ -32,6 +32,18 @@ bool DatagramServer::isBound()
     return (id == 0);
 }
 
+int DatagramServer::read(char* buffer, int size, int flags)
+{
+    socklen_t len = sizeof(serversockaddr);
+    return recvfrom(sock, buffer, size, flags, (struct sockaddr *)&serversockaddr, &len);
+}
+
+int DatagramServer::write(char* buffer, int size, int flags)
+{
+    socklen_t len = sizeof(serversockaddr);
+    return sendto(sock, buffer, size, flags, (struct sockaddr *)&serversockaddr, len);
+}
+
 DatagramServer::~DatagramServer()
 {
 
