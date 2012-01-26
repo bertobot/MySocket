@@ -48,17 +48,26 @@ public:
 
     // methods
 
-    int get(char *buffer, int size);
-    int get(char *buffer, int size, int flags);
-    
-    char getByte();
-    char getByte(int flags);
+    // read
 
-    int put(char *buffer, int size);
-    int put(char *buffer, int size, int flags);
+    int read(char *buffer, int size);
+    int read(char *buffer, int size, int flags);
+    std::string read(int size);
+    char readByte();
+    char readByte(int flags);
+    std::string readLine();
+
+    // write
+
+    int write(char *buffer, int size);
+    int write(char *buffer, int size, int flags);
+    int write(const std::string& str);
+    int write(const std::string& str, int flags);
     
-    int putByte(char c);
-    int putByte(char c, int flags);
+    int writeByte(char c);
+    int writeByte(char c, int flags);
+
+    int writeLine(const std::string& str);
 
     int setOption(int level, int optname, int boolean);
 
@@ -73,10 +82,8 @@ public:
     int getDebug();
     void setDebug(int d);
 
-    std::string readLine();
-    int write(const std::string& str);
-    int write(const std::string& str, int flags);    
-    int writeLine(const std::string& str);
+    
+
 
     virtual ~Socket();
 

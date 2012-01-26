@@ -83,7 +83,7 @@ int Socket::getProtocol() {
  * this method fetches data of 'size' length, and stores it
  * the provided char buffer.
  */
-int Socket::get(char * buffer, int size) {
+int Socket::read(char * buffer, int size) {
 
     if (! buffer) {
 	return -1;
@@ -99,7 +99,7 @@ int Socket::get(char * buffer, int size) {
  * this method fetches data of 'size' length, and stores it
  * the provided char buffer.
  */
-int Socket::get(char * buffer, int size, int flags) {
+int Socket::read(char * buffer, int size, int flags) {
 
     if (! buffer) {
 	return -1;
@@ -109,7 +109,7 @@ int Socket::get(char * buffer, int size, int flags) {
     return count;
 }
 /////////////////////////////////////////////////
-char Socket::getByte() {
+char Socket::readByte() {
     char buffer[1];
 
     int in = ::read(socket_descriptor, &buffer, sizeof(buffer) );
@@ -120,7 +120,7 @@ char Socket::getByte() {
     return -1;
 }
 /////////////////////////////////////////////////
-char Socket::getByte(int flags) {
+char Socket::readByte(int flags) {
     char buffer[1];
 
     int in = ::recv(socket_descriptor, &buffer, sizeof(buffer), flags);
@@ -131,23 +131,40 @@ char Socket::getByte(int flags) {
     return -1;
 }
 /////////////////////////////////////////////////
-int Socket::put(char* buffer, int size)
+std::string Socket::read(int size)
+{
+    std::string result;
+
+    for (int i = 0; i < size; i++) {
+	char c = readByte();
+	
+	if (c == -1) {
+	    // TODO: exception
+	    break;
+	}
+	
+	result += (char)c;
+    }
+    
+    return result;
+}
+/////////////////////////////////////////////////
+int Socket::write(char* buffer, int size)
 {
     return ::write(socket_descriptor, buffer, size);
 }
 /////////////////////////////////////////////////
-int Socket::put(char* buffer, int size, int flags)
+int Socket::write(char* buffer, int size, int flags)
 {
     return ::send(socket_descriptor, buffer, size, flags);
 }
-
 /////////////////////////////////////////////////
-int Socket::putByte(char c)
+int Socket::writeByte(char c)
 {
     return ::write(socket_descriptor, &c, 1);
 }
 /////////////////////////////////////////////////
-int Socket::putByte(char c, int flags)
+int Socket::writeByte(char c, int flags)
 {
     return ::send(socket_descriptor, &c, 1, flags);
 }
@@ -222,7 +239,7 @@ std::string Socket::readLine() {
     int t = -1;
 
     do {
-        t = getByte();
+        t = readByte();
 
 	if (t < 0)
             break;

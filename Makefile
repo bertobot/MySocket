@@ -6,7 +6,10 @@ RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 OBJ=Socket.o \
 ClientSocket.o \
 ServerSocket.o \
-Select.o
+Select.o \
+DatagramPacket.o \
+DatagramServer.o
+
 
 LIBNAME=libSocket.a
 
@@ -33,26 +36,8 @@ install: lib
 	install -D -m 666 *.h /usr/local/include/MySocket
 	install -D -m 666 *.a /usr/local/lib
 
-Socket.o: Socket.cpp
-	$(CC) -c Socket.cpp
-
-ClientSocket.o: ClientSocket.cpp
-	$(CC) -c ClientSocket.cpp
-
-ServerSocket.o: ServerSocket.cpp
-	$(CC) -c ServerSocket.cpp
-
-server.o: server.cpp
-	$(CC) -c server.cpp
-
-client.o: client.cpp
-	$(CC) -c client.cpp
-
-WatchedSocket.o: WatchedSocket.cpp
-	$(CC) -c WatchedSocket.cpp
-
-SocketWatcher.o: SocketWatcher.cpp
-	$(CC) -c SocketWatcher.cpp
+.cpp.o:
+	$(CC) -c $?
 
 clean:
 	rm -f *.o
