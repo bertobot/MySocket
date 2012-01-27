@@ -10,8 +10,8 @@ public:
     bool isBound();
     void init();
 
-    int read(char *buffer, int size, int flags = MSG_NOSIGNAL);
-    int write(char *buffer, int size, int flags = MSG_NOSIGNAL);
+    int read(char *buffer, int size, int flags = 0);
+    int write(char *buffer, int size, int flags = 0);
 
     virtual ~DatagramServer();
 
