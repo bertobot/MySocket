@@ -27,8 +27,7 @@ void DatagramPacket::setSocketDescriptor(int sock)
 /////////////////////////////////////////////////
 int DatagramPacket::read(char* buffer, int size, int flags)
 {
-    socklen_t len = sizeof(clientsockaddr);
-    return recvfrom(sock, buffer, size, flags, (struct sockaddr*)&clientsockaddr, &len);
+    return recvfrom(sock, buffer, size, flags, NULL, NULL);
 }
 /////////////////////////////////////////////////
 int DatagramPacket::write(char* buffer, int size, int flags)
