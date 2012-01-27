@@ -16,7 +16,7 @@ public:
     virtual ~DatagramServer();
 
 protected:
-    struct sockaddr_in serversockaddr;
+    struct sockaddr_in serversockaddr, clientsockaddr;
     int id;
     int serverPort;
 };
