@@ -48,6 +48,8 @@ protected:
 	*remoteaddr,
 	*addrresult;
 
+    struct sockaddr_in clientsockaddr;
+
     void init();
 };
 /////////////////////////////////////////////////

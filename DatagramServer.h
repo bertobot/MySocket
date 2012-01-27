@@ -10,13 +10,12 @@ public:
     bool isBound();
     void init();
 
-    int read(char *buffer, int size, int flags = MSG_NOSIGNAL);
     int write(char *buffer, int size, int flags = MSG_NOSIGNAL);
 
     virtual ~DatagramServer();
 
 protected:
-    struct sockaddr_in serversockaddr, clientsockaddr;
+    struct sockaddr_in serversockaddr;
     int id;
     int serverPort;
 };
