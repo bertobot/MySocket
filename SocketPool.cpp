@@ -25,6 +25,11 @@ std::vector< int > SocketPool::canWrite()
     return select.canWrite();
 }
 
+bool SocketPool::empty()
+{
+    return pool.empty();
+}
+
 SocketPool::~SocketPool()
 {
 

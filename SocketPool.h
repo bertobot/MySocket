@@ -20,6 +20,8 @@ public:
     std::vector<int> canRead();
     std::vector<int> canWrite();
 
+    bool empty();
+
     virtual ~SocketPool();
 };
 
