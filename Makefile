@@ -1,4 +1,4 @@
-CC=g++ -g3 -Wall
+CC=g++ -g3 -Wall -ffor-scope
 RELEASE_DIR=MySocket_release
 RELEASE_LIB=$(RELEASE_DIR)/lib
 RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket

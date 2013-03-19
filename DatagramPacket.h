@@ -11,6 +11,7 @@
 #ifndef __DatagramPacket_h_
 #define __DatagramPacket_h_
 /////////////////////////////////////////////////
+#include <unistd.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdio.h>
