@@ -67,7 +67,7 @@ public:
     int writeByte(char c);
     int writeByte(char c, int flags);
 
-    int writeLine(const std::string& str);
+    int writeLine(const std::string& str, int flags=MSG_NOSIGNAL);
 
     int setOption(int level, int optname, int boolean);
 
