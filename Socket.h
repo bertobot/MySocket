@@ -11,6 +11,8 @@
 #ifndef __Socket_h_
 #define __Socket_h_
 /////////////////////////////////////////////////
+#include "NIOException.h"
+
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/socket.h>

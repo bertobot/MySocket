@@ -85,11 +85,15 @@ int Socket::getProtocol() {
  */
 int Socket::read(char * buffer, int size) {
 
-    if (! buffer) {
-	return -1;
-    }
+    if (! buffer)
+		throw NIOException("first parameter is null.");
+
 
     int count = ::read(socket_descriptor, buffer, size);
+
+	if (count < 0)
+		throw NIOException("Read Fail.", count);
+
     return count;
 }
 /////////////////////////////////////////////////
@@ -101,11 +105,14 @@ int Socket::read(char * buffer, int size) {
  */
 int Socket::read(char * buffer, int size, int flags) {
 
-    if (! buffer) {
-	return -1;
-    }
+    if (! buffer)
+		throw NIOException("first paramater is null.");
 
     int count = ::recv(socket_descriptor, buffer, size, flags);
+
+	if (count < 0)
+		throw NIOException("Read Fail.", count);
+
     return count;
 }
 /////////////////////////////////////////////////
@@ -117,7 +124,7 @@ char Socket::readByte() {
     if (in >= 0)
         return buffer[0];
 
-    return -1;
+	throw NIOException("Read Fail.", -1);
 }
 /////////////////////////////////////////////////
 char Socket::readByte(int flags) {
@@ -128,22 +135,22 @@ char Socket::readByte(int flags) {
     if (in >= 0)
         return buffer[0];
 
-    return -1;
+	throw NIOException("Read Fail.", -1);
 }
 /////////////////////////////////////////////////
 std::string Socket::read(int size)
 {
     std::string result;
 
-    for (int i = 0; i < size; i++) {
-	char c = readByte();
-	
-	if (c == -1) {
-	    // TODO: exception
-	    break;
-	}
-	
-	result += (char)c;
+    try {
+        for (int i = 0; i < size; i++) {
+            char c = readByte();
+            
+            result += (char)c;
+        }
+    }
+    catch(NIOException n) {
+        // do nothing
     }
     
     return result;
@@ -151,22 +158,43 @@ std::string Socket::read(int size)
 /////////////////////////////////////////////////
 int Socket::write(char* buffer, int size)
 {
-    return ::write(socket_descriptor, buffer, size);
+    int len = ::write(socket_descriptor, buffer, size);
+
+    if (len < 0)
+        throw NIOException("Write Fail.", len);
+
+    return len;
 }
 /////////////////////////////////////////////////
 int Socket::write(char* buffer, int size, int flags)
 {
-    return ::send(socket_descriptor, buffer, size, flags);
+    int len = ::send(socket_descriptor, buffer, size, flags);
+
+    if (len < 0)
+        throw NIOException("Write Fail.", len);
+
+    return len;
 }
 /////////////////////////////////////////////////
 int Socket::writeByte(char c)
 {
-    return ::write(socket_descriptor, &c, 1);
+    int len = ::write(socket_descriptor, &c, 1);
+
+    if (len < 0)
+        throw NIOException("Write Fail.", len);
+
+    return len;
+    
 }
 /////////////////////////////////////////////////
 int Socket::writeByte(char c, int flags)
 {
-    return ::send(socket_descriptor, &c, 1, flags);
+    int len = ::send(socket_descriptor, &c, 1, flags);
+
+    if (len < 0)
+        throw NIOException("Write Fail.", len);
+
+    return len;
 }
 /////////////////////////////////////////////////
 bool Socket::isValid() {
@@ -241,14 +269,11 @@ std::string Socket::readLine() {
     do {
         t = readByte();
 
-	if (t < 0)
+        if (_debug > 0)
+            printf ("socket read: %c, %d\n", t, t);
+
+        if (t == '\n')
             break;
-
-	if (_debug > 0)
-	    printf ("socket read: %c, %d\n", t, t);
-
-	if (t == '\n')
-	    break;
 
         result += (char)t;
 
@@ -257,7 +282,7 @@ std::string Socket::readLine() {
     int len = result.size() - 1;
 
     if (result[len] == '\r')
-	result = result.substr(0, len);
+        result = result.substr(0, len);
 
     return result;
 }
@@ -265,6 +290,10 @@ std::string Socket::readLine() {
 int Socket::write(const std::string &str) {
     int len = ::write(socket_descriptor, str.c_str(), str.length() );
     //int len = ::send(socket_descriptor, str.c_str(), str.length() );
+
+	if (len < 0)
+		throw NIOException("Write failed.", len);
+	
     return len;
 }
 /////////////////////////////////////////////////
@@ -277,6 +306,10 @@ int Socket::write(const std::string &str, int flags) {
 int Socket::writeLine(const std::string &str, int flags) {
     std::string package = str + "\r\n";
     int len = ::send(socket_descriptor, package.c_str(), package.length(), flags);
+
+	if (len < 0)
+		throw NIOException("Write failed.", len);
+	
     return len;
 }
 /////////////////////////////////////////////////
@@ -288,3 +321,5 @@ Socket::~Socket() {
 //    printf("[Socket] destruct.\n");
 }
 /////////////////////////////////////////////////
+
+// vim: ts=4:sw=4:expandtab
