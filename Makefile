@@ -38,8 +38,8 @@ lib_release: lib
 	
 install: lib
 	mkdir -p /usr/local/include/MySocket
-	install -D -m 666 *.h /usr/local/include/MySocket
-	install -D -m 666 *.a /usr/local/lib
+	install -m 666 *.h /usr/local/include/MySocket
+	install -m 666 *.a /usr/local/lib
 
 .cpp.o:
 	$(CC) -c $?
