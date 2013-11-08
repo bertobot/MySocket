@@ -121,7 +121,7 @@ char Socket::readByte() {
 
     int in = ::read(socket_descriptor, &buffer, sizeof(buffer) );
     
-    if (in >= 0)
+    if (in > 0)
         return buffer[0];
 
 	throw NIOException("Read Fail.", -1);
