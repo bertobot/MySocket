@@ -16,6 +16,7 @@ class Select {
 public:
     Select();
     Select(const std::vector<int>&);
+    virtual ~Select();
 
     std::vector<int> canRead();
     std::vector<int> canWrite();
@@ -32,7 +33,7 @@ public:
     void setTimeout(long sec, long nsec);
     void setTimeout(double t);
 
-    virtual ~Select();
+    bool empty();
 
 private:
     void findMax();
@@ -52,3 +53,5 @@ private:
     int max;
 };
 #endif
+// vim: ts=4:sw=4:expandtab
+

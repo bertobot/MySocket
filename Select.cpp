@@ -189,6 +189,11 @@ void Select::setTimeout(double t) {
 
     setTimeout(t1, t3);
 }
+
+bool Select::empty() {
+	return (fds.size() == 0);
+}
+
 /////////////////////////////////////////////////
 Select::~Select() {
 
