@@ -1,6 +1,8 @@
 #ifndef __Select_h_
 #define __Select_h_
 
+#include "NIOException.h"
+
 #include <vector>
 
 #include <sys/time.h>

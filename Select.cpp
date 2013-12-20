@@ -97,9 +97,7 @@ std::vector<int> Select::canRead() {
     //printf("ready: %d\n", ready);
 
     if (ready == -1) {
-        // TODO: EXCEPTION
-        printf("exception in Select: %s\n", strerror(errno) );
-        return result;
+		throw NIOException();
     }
 
     for (int i = 0; i < nfds; i++) {
