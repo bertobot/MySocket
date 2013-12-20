@@ -7,6 +7,7 @@ OBJ=Socket.o \
 ClientSocket.o \
 ServerSocket.o \
 Select.o \
+SelectSocket.o \
 SocketPool.o \
 DatagramPacket.o \
 DatagramServer.o

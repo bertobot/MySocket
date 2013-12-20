@@ -41,7 +41,7 @@ public:
     void setShutdownMethod(int);
 
     // accessors
-    int getSocketDescriptor();
+    int getSocketDescriptor() const;
 
     int getDomain();
     int getType();

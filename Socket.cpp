@@ -61,7 +61,7 @@ void Socket::setProtocol(int p) {
     protocol = p;
 }
 /////////////////////////////////////////////////
-int Socket::getSocketDescriptor() {
+int Socket::getSocketDescriptor() const {
     return socket_descriptor;
 }
 /////////////////////////////////////////////////

@@ -39,7 +39,6 @@ private:
     void prepare();
     void init();
 
-protected:
     fd_set
         read_fds,
         write_fds,
