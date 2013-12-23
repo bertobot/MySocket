@@ -9,6 +9,7 @@ void Socket::pre_init(int d, int t, int p, int s) {
     _debug = 0;
 
     error = false;
+    mConnected = true;
 }
 /////////////////////////////////////////////////
 void Socket::init(int d, int t, int p, int s) {
@@ -26,27 +27,7 @@ Socket::Socket(int t, int d, int p, int s) {
 /////////////////////////////////////////////////
 Socket::Socket(int fd=-1) {
     socket_descriptor = fd;
-    //error = false;
-    //domain = type = protocol = shutdown_method = 0;
     pre_init();
-}
-/////////////////////////////////////////////////
-Socket::Socket(const Socket & s) {
-    socket_descriptor = s.socket_descriptor;
-    pre_init();
-}
-/////////////////////////////////////////////////
-Socket Socket::operator=(const Socket &rhs) {
-    // if same object, return
-    if (this == &rhs)
-        return *this;
-
-    // clear?  no
-
-    socket_descriptor = rhs.socket_descriptor;
-    init();
-
-    return *this;
 }
 /////////////////////////////////////////////////
 void Socket::setDomain(int d) {
@@ -208,7 +189,8 @@ int Socket::close() {
     int rc = ::shutdown(socket_descriptor, 2);
     rc = ::close(socket_descriptor);
 
-    socket_descriptor = -1;
+    mConnected = false;
+
     return rc;
 }
 /////////////////////////////////////////////////
@@ -312,6 +294,11 @@ int Socket::writeLine(const std::string &str, int flags) {
 	
     return len;
 }
+
+bool Socket::isConnected() {
+    return mConnected;
+}
+
 /////////////////////////////////////////////////
 Socket::~Socket() {
 // 07.12.2006 - berto
