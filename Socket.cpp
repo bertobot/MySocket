@@ -184,7 +184,7 @@ bool Socket::isValid() {
 /////////////////////////////////////////////////
 int Socket::close() {
     if (_debug > 0)
-	printf("[Socket: close] %d\n", socket_descriptor);
+        printf("[Socket: close] %d\n", socket_descriptor);
 
     int rc = ::shutdown(socket_descriptor, 2);
     rc = ::close(socket_descriptor);
