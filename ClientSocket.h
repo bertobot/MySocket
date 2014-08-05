@@ -38,7 +38,6 @@ private:
     void init(const std::string&, int);
     void setSockAddr(const std::string&, const std::string&);
 
-protected:
     std::string server_address;
     int port;
     int id;

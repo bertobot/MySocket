@@ -10,7 +10,8 @@ Select.o \
 SelectSocket.o \
 SocketPool.o \
 DatagramPacket.o \
-DatagramServer.o
+DatagramServer.o \
+BufferedReader.o
 
 
 LIBNAME=libSocket.a

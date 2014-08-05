@@ -43,11 +43,12 @@ void ClientSocket::init(const std::string& addr, int p) {
 	if (! server) {
 		server = gethostbyname(server_address.c_str() );
 		if (! server) {
-			error = true;
+			setError(true);
 			return;
 		}
 
-		my_sockaddr.sin_family = domain;
+		my_sockaddr.sin_family = getDomain();
+
 		bcopy(
 			(char *)server->h_addr,
 			(char *)&my_sockaddr.sin_addr.s_addr,
@@ -77,22 +78,23 @@ void ClientSocket::setSockAddr(const std::string &address, const std::string &se
     }
 
     if (addr_result) {
-        int sfd = 0;
-        addrinfo *rp = addr_result;
-        while (sfd < 1) {
-            domain = rp->ai_family;
-            type = rp->ai_socktype;
-            protocol = rp->ai_protocol;
 
-            sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
-            rp = rp->ai_next;
+        int sfd = 0;
+
+        addrinfo *rp = addr_result;
+
+        while (sfd < 1) {
+		sfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);
+
+		rp = rp->ai_next;
         }
-        socket_descriptor = sfd;
+
+	setSocketDescriptor(sfd);
     }
 }
 /////////////////////////////////////////////////
 bool ClientSocket::connect() {
-    id = ::connect(socket_descriptor, (sockaddr *)&my_sockaddr, sizeof(my_sockaddr) );
+    id = ::connect(getSocketDescriptor(), (sockaddr *)&my_sockaddr, sizeof(my_sockaddr) );
     return isConnected();
 }
 /////////////////////////////////////////////////
@@ -100,7 +102,7 @@ bool ClientSocket::connect2() {
     if (!addr_result)
         return false;
     
-    id = ::connect(socket_descriptor, addr_result->ai_addr, addr_result->ai_addrlen);
+    id = ::connect(getSocketDescriptor(), addr_result->ai_addr, addr_result->ai_addrlen);
     return isConnected();
 }
 /////////////////////////////////////////////////

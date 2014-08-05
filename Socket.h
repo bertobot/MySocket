@@ -52,24 +52,18 @@ public:
 
     // read
 
-    int read(char *buffer, int size);
     int read(char *buffer, int size, int flags);
+    int read(char *buffer, int size);
     std::string read(int size);
     char readByte();
     char readByte(int flags);
-    std::string readLine();
 
     // write
 
-    int write(char *buffer, int size);
-    int write(char *buffer, int size, int flags);
-    int write(const std::string& str);
-    int write(const std::string& str, int flags);
-    
-    int writeByte(char c);
-    int writeByte(char c, int flags);
-
-    int writeLine(const std::string& str, int flags=MSG_NOSIGNAL);
+    int write(const char *buffer, int size, int flags=MSG_NOSIGNAL);
+    int write(const std::string& str, int flags=MSG_NOSIGNAL);
+    int writeByte(char c, int flags=MSG_NOSIGNAL);
+    int writeLine(const std::string &str, int flags=MSG_NOSIGNAL);
 
     int setOption(int level, int optname, int boolean);
 
@@ -86,6 +80,10 @@ public:
 
     bool isConnected();
 
+    void setSocketDescriptor(int sd);
+
+    void setError(bool err);
+
     
 
 
@@ -94,9 +92,13 @@ public:
 private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
     void pre_init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
+
     bool mConnected;
 
-protected:
+    std::string mBuffer;
+    long int mPos;
+
+
     int
         socket_descriptor,
         domain,
@@ -109,3 +111,6 @@ protected:
 };
 /////////////////////////////////////////////////
 #endif
+
+// vim: ts=4:sw=4:expandtab
+

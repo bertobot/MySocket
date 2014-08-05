@@ -5,15 +5,15 @@ void ServerSocket::init(int po) {
 
     bzero( (char*)&my_sockaddr, sizeof(my_sockaddr) );
 
-    my_sockaddr.sin_family = domain;
+    my_sockaddr.sin_family = getDomain();
     my_sockaddr.sin_addr.s_addr = INADDR_ANY;
     my_sockaddr.sin_port = htons(port);
 
     // set to always reuse addr.
     int boolean = 1;
 
-    if (setsockopt(socket_descriptor, SOL_SOCKET, SO_REUSEADDR, &boolean, sizeof(int) ) == 0)
-	id = bind(socket_descriptor, (struct sockaddr *)&my_sockaddr, sizeof(my_sockaddr) );
+    if (setsockopt(getSocketDescriptor(), SOL_SOCKET, SO_REUSEADDR, &boolean, sizeof(int) ) == 0)
+	id = bind(getSocketDescriptor(), (struct sockaddr *)&my_sockaddr, sizeof(my_sockaddr) );
     else
 	id = -1;
 
@@ -32,7 +32,7 @@ ServerSocket::ServerSocket(int p) : Socket () {
 }
 /////////////////////////////////////////////////
 bool ServerSocket::listen(int num) {
-    int l = ::listen(socket_descriptor, num);
+    int l = ::listen(getSocketDescriptor(), num);
     if (l < 0)
         return false;
     return true;
@@ -41,7 +41,7 @@ bool ServerSocket::listen(int num) {
 Socket ServerSocket::accept() {
     struct sockaddr_in client_sockaddr;
     int size = sizeof(client_sockaddr);
-    int nfd = ::accept(socket_descriptor, (struct sockaddr *)&client_sockaddr, (socklen_t *)&size );
+    int nfd = ::accept(getSocketDescriptor(), (struct sockaddr *)&client_sockaddr, (socklen_t *)&size );
     Socket socket(nfd);
     return socket;
 }

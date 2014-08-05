@@ -31,7 +31,6 @@ public:
 private:
     void init(int);
 
-protected:
     int port;
     int id;
     int connections;

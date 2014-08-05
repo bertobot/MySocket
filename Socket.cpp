@@ -123,31 +123,18 @@ std::string Socket::read(int size)
 {
     std::string result;
 
-    try {
-        for (int i = 0; i < size; i++) {
-            char c = readByte();
-            
-            result += (char)c;
-        }
-    }
-    catch(NIOException n) {
-        // do nothing
-    }
+    char *buffer = new char[size];
+
+    bzero(buffer, size);
+
+    read(buffer, size);
+
+    result = buffer;
     
     return result;
 }
 /////////////////////////////////////////////////
-int Socket::write(char* buffer, int size)
-{
-    int len = ::write(socket_descriptor, buffer, size);
-
-    if (len < 0)
-        throw NIOException("Write Fail.", len);
-
-    return len;
-}
-/////////////////////////////////////////////////
-int Socket::write(char* buffer, int size, int flags)
+int Socket::write(const char* buffer, int size, int flags)
 {
     int len = ::send(socket_descriptor, buffer, size, flags);
 
@@ -155,17 +142,6 @@ int Socket::write(char* buffer, int size, int flags)
         throw NIOException("Write Fail.", len);
 
     return len;
-}
-/////////////////////////////////////////////////
-int Socket::writeByte(char c)
-{
-    int len = ::write(socket_descriptor, &c, 1);
-
-    if (len < 0)
-        throw NIOException("Write Fail.", len);
-
-    return len;
-    
 }
 /////////////////////////////////////////////////
 int Socket::writeByte(char c, int flags)
@@ -177,6 +153,12 @@ int Socket::writeByte(char c, int flags)
 
     return len;
 }
+
+int Socket::writeLine(const std::string &str, int flags) {
+    std::string sstr(str + "\r\n");
+    return write(sstr.c_str(), sstr.length(), flags);
+}
+
 /////////////////////////////////////////////////
 bool Socket::isValid() {
     return (socket_descriptor >= 0) && !error;
@@ -236,76 +218,25 @@ int Socket::getDebug() {
 	return _debug;
 }
 /////////////////////////////////////////////////
-// readLine
-//
-// override socket's read to read from the string
-// buffer instead.  This function will return
-// a string terminated by a newline.  the newline
-// will not be part of the returned string.
-//
-std::string Socket::readLine() {
-    std::string result;
-
-    int t = -1;
-
-    do {
-        t = readByte();
-
-        if (_debug > 0)
-            printf ("socket read: %c, %d\n", t, t);
-
-        if (t == '\n')
-            break;
-
-        result += (char)t;
-
-    } while (t != -1);
-
-    int len = result.size() - 1;
-
-    if (result[len] == '\r')
-        result = result.substr(0, len);
-
-    return result;
-}
-/////////////////////////////////////////////////
-int Socket::write(const std::string &str) {
-    int len = ::write(socket_descriptor, str.c_str(), str.length() );
-    //int len = ::send(socket_descriptor, str.c_str(), str.length() );
-
-	if (len < 0)
-		throw NIOException("Write failed.", len);
-	
-    return len;
-}
-/////////////////////////////////////////////////
 int Socket::write(const std::string &str, int flags) {
-    //int len = ::write(socket_descriptor, str.c_str(), str.length() );
     int len = ::send(socket_descriptor, str.c_str(), str.length(), flags);
     return len;
 }
 /////////////////////////////////////////////////
-int Socket::writeLine(const std::string &str, int flags) {
-    std::string package = str + "\r\n";
-    int len = ::send(socket_descriptor, package.c_str(), package.length(), flags);
-
-	if (len < 0)
-		throw NIOException("Write failed.", len);
-	
-    return len;
-}
-
 bool Socket::isConnected() {
     return mConnected;
 }
 
+void Socket::setSocketDescriptor(int sd) {
+    socket_descriptor = sd;
+}
+
+void Socket::setError(bool err) {
+    error = err;
+}
+
 /////////////////////////////////////////////////
 Socket::~Socket() {
-// 07.12.2006 - berto
-// don't auto-destruct.
-//
-//    close();
-//    printf("[Socket] destruct.\n");
 }
 /////////////////////////////////////////////////
 
