@@ -9,7 +9,6 @@ void Socket::pre_init(int d, int t, int p, int s) {
     _debug = 0;
 
     error = false;
-    mConnected = true;
 }
 /////////////////////////////////////////////////
 void Socket::init(int d, int t, int p, int s) {
@@ -171,8 +170,6 @@ int Socket::close() {
     int rc = ::shutdown(socket_descriptor, 2);
     rc = ::close(socket_descriptor);
 
-    mConnected = false;
-
     return rc;
 }
 /////////////////////////////////////////////////
@@ -224,7 +221,11 @@ int Socket::write(const std::string &str, int flags) {
 }
 /////////////////////////////////////////////////
 bool Socket::isConnected() {
-    return mConnected;
+    int errnum;
+    int errsize = sizeof(errnum);
+    int rc = getsockopt(socket_descriptor, SOL_SOCKET, SO_ERROR, &errnum, (socklen_t*)&errsize);
+
+    return errnum == 0;
 }
 
 void Socket::setSocketDescriptor(int sd) {
@@ -235,9 +236,24 @@ void Socket::setError(bool err) {
     error = err;
 }
 
-/////////////////////////////////////////////////
-Socket::~Socket() {
+int Socket::setKeepalive(bool k) {
+    int keepalive;
+
+    k ? keepalive = 1 : keepalive = 0;
+
+    return setsockopt(socket_descriptor, SOL_SOCKET, SO_KEEPALIVE, &keepalive, sizeof(keepalive));
+
 }
-/////////////////////////////////////////////////
+
+int Socket::setLinger(bool l, int timeout) {
+    linger so_linger;
+
+    l ? so_linger.l_onoff = 1 : so_linger.l_onoff = 0;
+
+    so_linger.l_linger = timeout;
+
+    return setsockopt(socket_descriptor, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(linger));
+
+}
 
 // vim: ts=4:sw=4:expandtab

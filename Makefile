@@ -6,9 +6,6 @@ RELEASE_INCLUDE=$(RELEASE_DIR)/include/MySocket
 OBJ=Socket.o \
 ClientSocket.o \
 ServerSocket.o \
-Select.o \
-SelectSocket.o \
-SocketPool.o \
 DatagramPacket.o \
 DatagramServer.o \
 BufferedReader.o

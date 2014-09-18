@@ -25,7 +25,7 @@
 
 #include <string.h>
 #include <string>
-/////////////////////////////////////////////////
+
 class Socket {
 public:
     Socket();
@@ -33,6 +33,7 @@ public:
     Socket(int type, int domain, int protocol, int shutdownMethod);
 //    Socket(const Socket&);
 //    Socket operator =(const Socket &rhs);
+    ~Socket(){}
 
     // mutators
     void setDomain(int);
@@ -84,16 +85,14 @@ public:
 
     void setError(bool err);
 
-    
+    int setKeepalive(bool k);
 
+    int setLinger(bool l, int timeout);
 
-    virtual ~Socket();
 
 private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
     void pre_init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
-
-    bool mConnected;
 
     std::string mBuffer;
     long int mPos;
