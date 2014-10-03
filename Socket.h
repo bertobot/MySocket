@@ -94,10 +94,6 @@ private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
     void pre_init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
 
-    std::string mBuffer;
-    long int mPos;
-
-
     int
         socket_descriptor,
         domain,
