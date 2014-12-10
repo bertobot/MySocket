@@ -9,6 +9,8 @@ void Socket::pre_init(int d, int t, int p, int s) {
     _debug = 0;
 
     error = false;
+
+    mClosed = false;
 }
 /////////////////////////////////////////////////
 void Socket::init(int d, int t, int p, int s) {
@@ -170,6 +172,8 @@ int Socket::close() {
     int rc = ::shutdown(socket_descriptor, 2);
     rc = ::close(socket_descriptor);
 
+    mClosed = true;
+
     return rc;
 }
 /////////////////////////////////////////////////
@@ -254,6 +258,10 @@ int Socket::setLinger(bool l, int timeout) {
 
     return setsockopt(socket_descriptor, SOL_SOCKET, SO_LINGER, &so_linger, sizeof(linger));
 
+}
+
+bool Socket::closed() {
+    return mClosed;
 }
 
 // vim: ts=4:sw=4:expandtab

@@ -33,7 +33,7 @@ public:
     Socket(int type, int domain, int protocol, int shutdownMethod);
 //    Socket(const Socket&);
 //    Socket operator =(const Socket &rhs);
-    ~Socket(){}
+    virtual ~Socket(){}
 
     // mutators
     void setDomain(int);
@@ -89,6 +89,7 @@ public:
 
     int setLinger(bool l, int timeout);
 
+    bool closed();
 
 private:
     void init(int d=AF_INET, int t=SOCK_STREAM, int p=0, int s=SHUT_RDWR);
@@ -103,6 +104,9 @@ private:
 
     bool error;
     int _debug;
+
+    // close state call
+    bool mClosed;
 };
 /////////////////////////////////////////////////
 #endif
