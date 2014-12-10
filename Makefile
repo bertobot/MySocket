@@ -40,6 +40,10 @@ install: lib
 	install -m 666 *.h /usr/local/include/MySocket
 	install -m 666 *.a /usr/local/lib
 
+uninstall:
+	rm -rf /usr/local/include/MySocket
+	rm -rf /usr/local/lib/$(LIBNAME)
+
 .cpp.o:
 	$(CC) -c $?
 
