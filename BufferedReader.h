@@ -12,7 +12,7 @@ class BufferedReader {
 public:
 	BufferedReader(Socket *socket);
 
-	~BufferedReader();
+	virtual ~BufferedReader();
 
 	operator bool() const;
 
