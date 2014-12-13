@@ -73,8 +73,13 @@ int Socket::read(char * buffer, int size) {
 
     int count = ::read(socket_descriptor, buffer, size);
 
-	if (count < 0)
+	if (count < 0) {
+        // account for o_nonblock
+        if (errno == EWOULDBLOCK || errno == EAGAIN)
+            return 0;
+
 		throw NIOException("Read Fail.", count);
+    }
 
     return count;
 }
@@ -92,8 +97,13 @@ int Socket::read(char * buffer, int size, int flags) {
 
     int count = ::recv(socket_descriptor, buffer, size, flags);
 
-	if (count < 0)
+	if (count < 0) {
+        // account for o_nonblock
+        if (errno == EWOULDBLOCK || errno == EAGAIN)
+            return 0;
+
 		throw NIOException("Read Fail.", count);
+    }
 
     return count;
 }

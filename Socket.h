@@ -25,6 +25,7 @@
 
 #include <string.h>
 #include <string>
+#include <errno.h>
 
 class Socket {
 public:
