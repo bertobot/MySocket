@@ -34,6 +34,19 @@ int DatagramPacket::write(char* buffer, int size, int flags)
 {
     return sendto(sock, buffer, size, flags, remoteaddr->ai_addr, remoteaddr->ai_addrlen);
 }
+
+int DatagramPacket::write(const std::string &message, int flags) {
+    // strdup
+    char *buffer = new char[message.length()];
+    strncpy(buffer, message.c_str(), message.length());
+
+    int rc = write(buffer, message.length(), flags);
+
+    delete [] buffer;
+
+    return rc;
+}
+
 /////////////////////////////////////////////////
 void DatagramPacket::init()
 {
@@ -75,3 +88,15 @@ DatagramPacket::~DatagramPacket()
     clear();
 }
 /////////////////////////////////////////////////
+int DatagramPacket::getSocket() {
+    return sock;
+}
+
+void DatagramPacket::setSocket(int fd) {
+    sock = fd;
+}
+
+struct sockaddr_in & DatagramPacket::getClientSockAddr() {
+    return clientsockaddr;
+}
+

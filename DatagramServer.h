@@ -15,10 +15,10 @@ public:
 
     virtual ~DatagramServer();
 
-protected:
+private:
+    int serverPort;
     struct sockaddr_in serversockaddr;
     int id;
-    int serverPort;
 };
 
 #endif

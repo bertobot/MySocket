@@ -18,7 +18,7 @@ public:
 
 	std::string readLine(int rsize=8192);
 
-	std::string read(int size);
+	std::string read(unsigned int size);
 
 	bool empty() const;
 

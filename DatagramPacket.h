@@ -32,14 +32,21 @@ public:
     int getSocketDescriptor();
 
     int read(char *buffer, int size, int flags=0);
+
     int write(char *buffer, int size, int flags=0);
+    int write(const std::string &message, int flags=0);
 
     void clear();
     void close();
 
+    int getSocket();
+    void setSocket(int fd);
+
+    struct sockaddr_in & getClientSockAddr();
+
     virtual ~DatagramPacket();
 
-protected:
+private:
     int sock;
     std::string address;
     std::string port;

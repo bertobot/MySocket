@@ -10,7 +10,7 @@ DatagramServer::DatagramServer(int port) : DatagramPacket()
 
 void DatagramServer::init()
 {
-    sock = socket(AF_INET, SOCK_DGRAM, 0);
+    setSocket(socket(AF_INET, SOCK_DGRAM, 0) );
 
     bzero(&serversockaddr,sizeof(serversockaddr));
 
@@ -21,10 +21,10 @@ void DatagramServer::init()
     // set to always reuse addr.
     int boolean = 1;
 
-    if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &boolean, sizeof(int) ) == 0)
-	id = bind(sock, (struct sockaddr *)&serversockaddr, sizeof(serversockaddr) );
+    if (setsockopt(getSocket(), SOL_SOCKET, SO_REUSEADDR, &boolean, sizeof(int) ) == 0)
+        id = bind(getSocket(), (struct sockaddr *)&serversockaddr, sizeof(serversockaddr) );
     else
-	id = -1;
+        id = -1;
 }
 
 bool DatagramServer::isBound()
@@ -34,13 +34,13 @@ bool DatagramServer::isBound()
 
 int DatagramServer::read(char* buffer, int size, int flags)
 {
-    socklen_t len = sizeof(clientsockaddr);
-    return recvfrom(sock, buffer, size, flags, (struct sockaddr*)&clientsockaddr, &len);
+    socklen_t len = sizeof(getClientSockAddr());
+    return recvfrom(getSocket(), buffer, size, flags, (struct sockaddr*)&getClientSockAddr(), &len);
 }
 
 int DatagramServer::write(char* buffer, int size, int flags)
 {
-    return sendto(sock, buffer, size, flags, (struct sockaddr*)&clientsockaddr, sizeof(clientsockaddr) );
+    return sendto(getSocket(), buffer, size, flags, (struct sockaddr*)&getClientSockAddr(), sizeof(getClientSockAddr()) );
 }
 
 DatagramServer::~DatagramServer()

@@ -58,7 +58,7 @@ std::string BufferedReader::readLine(int rsize) {
 	return result;
 }
 
-std::string BufferedReader::read(int size) {
+std::string BufferedReader::read(unsigned int size) {
 	std::string result;
 
 	if (mBuffer.size() <= size) {

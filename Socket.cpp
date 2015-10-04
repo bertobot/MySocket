@@ -237,7 +237,9 @@ int Socket::write(const std::string &str, int flags) {
 bool Socket::isConnected() {
     int errnum;
     int errsize = sizeof(errnum);
-    int rc = getsockopt(socket_descriptor, SOL_SOCKET, SO_ERROR, &errnum, (socklen_t*)&errsize);
+
+    if (getsockopt(socket_descriptor, SOL_SOCKET, SO_ERROR, &errnum, (socklen_t*)&errsize) < 0)
+        return false;
 
     return errnum == 0;
 }
