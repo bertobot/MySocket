@@ -1,0 +1,9 @@
+Package: libmysocket-dev
+Maintainer: berto <berto@fairfaxsmartware.com>
+Version: 0.1-1
+Section: libdevel
+Priority: optional
+Architecture: amd64
+Description: MySocket lib
+ MySocket lib
+
