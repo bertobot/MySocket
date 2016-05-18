@@ -21,9 +21,14 @@ public:
     ClientSocket(const std::string&, int, struct hostent*);
     ClientSocket(const std::string&, int, int, int, int, int);
 
-    bool connect();
-    bool connect2();
-    bool isConnected();
+    /**
+    * connect to remote host.
+    * @param timeout number of seconds to try.
+    * @return bool true if connects before timeout, false otherwise.
+    */
+    bool connect(double timeout=180);
+    bool connect2(double timeout=180);
+    bool isConnected() { return mConnected; }
 
 	struct hostent * getServer();
 
@@ -45,6 +50,8 @@ private:
     struct sockaddr_in my_sockaddr;
     struct hostent *server;
     addrinfo *addr_result;
+
+    bool mConnected;
 };
 /////////////////////////////////////////////////
 #endif
