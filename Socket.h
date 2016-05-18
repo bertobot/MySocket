@@ -42,6 +42,8 @@ public:
     void setProtocol(int);
     void setShutdownMethod(int);
 
+    int setBlocking(bool);
+
     // accessors
     int getSocketDescriptor() const;
 
@@ -49,6 +51,8 @@ public:
     int getType();
     int getProtocol();
     int getShutdownMethod();
+
+    bool getBlocking();
 
     // methods
 
@@ -75,6 +79,8 @@ public:
     long getClientPort();
 
     int close();
+
+    // TODO: keeping for backward compatibility
     int makeNonBlocking();
 
     int getDebug();

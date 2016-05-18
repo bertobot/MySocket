@@ -208,12 +208,27 @@ long Socket::getClientPort() {
 
     return 0;
 }
-/////////////////////////////////////////////////
-int Socket::makeNonBlocking() {
+
+int Socket::setBlocking(bool b) {
     long currentFlags = fcntl(socket_descriptor, F_GETFL);
-    currentFlags |= O_NONBLOCK;
+
+    if (b)
+        currentFlags &= ~O_NONBLOCK;
+    else
+        currentFlags |= O_NONBLOCK;
+
     int rc = fcntl(socket_descriptor, F_SETFL, currentFlags);
     return rc;
+}
+
+bool Socket::getBlocking() {
+    long currentFlags = fcntl(socket_descriptor, F_GETFL);
+    return currentFlags & ~O_NONBLOCK;
+}
+
+/////////////////////////////////////////////////
+int Socket::makeNonBlocking() {
+    return setBlocking(true);
 }
 /////////////////////////////////////////////////
 int Socket::setOption(int level, int optname, int boolean) {
