@@ -3,14 +3,10 @@
 int main() {
     ClientSocket client("localhost", 33000);
 
-    client.connect();
-
-    if (client.isConnected() ) {
+    if (client.connect(5) )
         client.write("greetings from the client!");
-    }
-    else {
-        printf ("something went wrong...\n");
-    }
+    else 
+        printf ("something went wrong: %s\n", strerror(errno));
 
     // clean up
     client.close();
