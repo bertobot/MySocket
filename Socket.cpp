@@ -141,6 +141,9 @@ std::string Socket::read(int size)
     read(buffer, size);
 
     result = buffer;
+
+    delete [] buffer;
+    buffer = NULL;
     
     return result;
 }
