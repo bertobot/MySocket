@@ -43,6 +43,7 @@ int DatagramPacket::write(const std::string &message, int flags) {
     int rc = write(buffer, message.length(), flags);
 
     delete [] buffer;
+    buffer = NULL;
 
     return rc;
 }
